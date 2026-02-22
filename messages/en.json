@@ -1,0 +1,859 @@
+{
+    "HomePage": {
+        "title": "Applied AI Playground",
+        "description": "A developer's sandbox for exploring practical AI integration patterns. Featuring cost tracking, observability, and smart caching.",
+        "availableDemos": "Available Demos"
+    },
+    "Navigation": {
+        "architecture": "View Architecture",
+        "portfolio": "My Portfolio",
+        "features": "Built-in Features",
+        "techStack": "Technology Stack"
+    },
+    "SettingsModal": {
+        "title": "Personal API Keys",
+        "description": "Configure your own API keys to use the lab with your personal limits and costs.",
+        "privacyNote": "Your keys are stored only in your browser's localStorage and never leave this device except when sent directly to the AI providers via our secure API endpoint.",
+        "localOnly": "Stored locally",
+        "saved": "Settings saved!",
+        "saveAction": "Save Changes"
+    },
+    "ArchitecturePage": {
+        "backHome": "← Back to playground",
+        "title": "How It Works",
+        "description": "Technical overview of the implementation patterns",
+        "requestLifecycle": {
+            "title": "Request Lifecycle",
+            "steps": {
+                "clientSubmit": "Client submits form with input",
+                "validateInput": "Validate input against Zod schema",
+                "hashInput": "Hash input to generate cache key",
+                "checkCache": "Check in-memory cache",
+                "hit": "HIT: Return cached result",
+                "miss": "MISS: Continue to AI call",
+                "generatePrompt": "Generate prompt from template",
+                "callAi": "Call Orchestrator.callAI()",
+                "estimateTokens": "Estimate tokens & cost",
+                "attemptApi": "Attempt API call with retry",
+                "parseResponse": "Parse and validate response",
+                "cacheResult": "Cache result (24h TTL)",
+                "logEvent": "Log event with metrics",
+                "returnResponse": "Return response + metadata",
+                "displayResult": "Client displays result"
+            }
+        },
+        "layers": {
+            "title": "Architecture Layers",
+            "presentation": {
+                "title": "Presentation Layer",
+                "description": "React components for form input and result display",
+                "form": "Form generation & validation",
+                "display": "Result visualization",
+                "page": "Page orchestration"
+            },
+            "api": {
+                "title": "API & Route Handlers",
+                "description": "Next.js 16 route handlers with server-side processing",
+                "validate": "Validate input",
+                "checkCache": "Check cache",
+                "callOrchestrator": "Call orchestrator",
+                "logMetrics": "Log metrics"
+            },
+            "core": {
+                "title": "Core Services",
+                "description": "Production-grade business logic and integrations",
+                "orchestrator": {
+                    "title": "AI Integration Layer",
+                    "provider": "Multi-provider API abstraction",
+                    "retry": "Automatic retry with exponential backoff",
+                    "cost": "Token estimation & cost calculation"
+                },
+                "cache": {
+                    "title": "Cache Manager",
+                    "hash": "SHA-256 input hashing",
+                    "ttl": "TTL-based expiration"
+                },
+                "logger": {
+                    "title": "Logger",
+                    "structured": "Structured event logging",
+                    "metrics": "Experiment metrics tracking"
+                }
+            },
+            "experiment": {
+                "title": "Demo System",
+                "description": "Modular demo definitions with versioning",
+                "schema": "Zod input/output validation",
+                "prompt": "Versioned prompt templates",
+                "handler": "Response parsing",
+                "module": "Module export"
+            }
+        },
+        "dataFlow": {
+            "title": "Data Flow Diagram"
+        },
+        "typeSafety": {
+            "title": "Type Safety & Validation",
+            "description": "End-to-end type safety using TypeScript and Zod schemas",
+            "input": {
+                "title": "Input Validation",
+                "description": "Each demo defines input schema that validates:",
+                "required": "Required fields presence",
+                "type": "Type correctness (string, enum, etc.)",
+                "length": "Length constraints (min/max)",
+                "custom": "Custom validation rules"
+            },
+            "output": {
+                "title": "Output Validation",
+                "description": "AI responses are validated against output schema to ensure:",
+                "structure": "Correct JSON structure",
+                "enum": "Valid enum values",
+                "shapes": "Array and object shapes",
+                "coercion": "Type coercion where appropriate"
+            }
+        },
+        "extensibility": {
+            "title": "Adding New Demos",
+            "description": "Creating new experiments requires minimal code and no core changes:",
+            "steps": {
+                "1": "Create schema.ts with Zod definitions",
+                "2": "Create prompt.ts with template functions",
+                "3": "Create handler.ts to parse responses",
+                "4": "Export module from index.ts",
+                "5": "Register in config/experiments.ts",
+                "1_desc": "Define inputSchema and outputSchema",
+                "2_desc": "Support version control",
+                "3_desc": "JSON parsing and schema validation",
+                "4_desc": "Combine all pieces with metadata",
+                "5_desc": "Add to EXPERIMENTS_REGISTRY"
+            }
+        },
+        "performance": {
+            "title": "Performance & Optimization",
+            "caching": {
+                "title": "Caching",
+                "ttl": "24-hour default TTL",
+                "keys": "SHA-256 cache keys",
+                "expiration": "Automatic expiration",
+                "memory": "In-memory (Redis-ready)"
+            },
+            "resilience": {
+                "title": "Resilience",
+                "retry": "Exponential backoff retry",
+                "timeout": "30s request timeout",
+                "handling": "Graceful error handling",
+                "logging": "Structured logging"
+            }
+        }
+    },
+    "LanguageSwitcher": {
+        "switchLanguage": "Switch Language"
+    },
+    "SharePage": {
+        "loading": "Loading shared result...",
+        "invalidLink": {
+            "title": "Invalid Link",
+            "noData": "No shared data found in URL",
+            "corrupted": "Invalid or corrupted share link",
+            "goHome": "Go Home"
+        },
+        "backToLab": "Back to Playground",
+        "sharedResult": "Shared Result",
+        "tryExperiment": "Try This Experiment",
+        "reproduce": "Reproduce with same input",
+        "sharedAt": "Shared {date}",
+        "analysisResults": "Analysis Results",
+        "error": "Error",
+        "resultData": "Result Data",
+        "cta": {
+            "text": "Want to try this experiment yourself?",
+            "button": "Run This Experiment"
+        },
+        "metadata": {
+            "latency": "Latency",
+            "tokens": "Tokens",
+            "cost": "Cost",
+            "cache": "Cache",
+            "hit": "Hit",
+            "miss": "Miss"
+        }
+    },
+    "PortfolioPage": {
+        "metadata": {
+            "title": "Nguyen Van Bo | Frontend / Full-stack Engineer",
+            "description": "Frontend / Full-stack Engineer with 6+ years experience in Fintech, SaaS, and Enterprise. Systems thinker, technical leader."
+        },
+        "nav": {
+            "back": "← Back to AI Lab"
+        },
+        "hero": {
+            "role": "Frontend / Full-stack Engineer | Systems Thinker | Technical Leader",
+            "title": "I design and build frontend systems that scale—in products, teams, and complexity.",
+            "description": "6+ years experience building products across Fintech, SaaS, and Enterprise\nNow focused on my own ventures: AI-powered platforms and data-driven products\nBased in Vietnam, open to global/remote opportunities",
+            "viewWork": "View my work",
+            "howIThink": "How I think"
+        },
+        "philosophy": {
+            "title": "My Approach",
+            "intro1": "After six years building products across startups and enterprise environments, I've transitioned to building my own ventures. From AI-powered astrology platforms to market intelligence tools, I'm passionate about creating products that solve real problems at the intersection of technology and culture.",
+            "intro2": "The rise of AI has opened new possibilities for solo founders. I've learned to leverage LLMs not just as tools, but as core product differentiators—whether it's generating personalized horoscopes or democratizing market data for Vietnamese businesses.",
+            "guidesTitle": "What Guides Me",
+            "guides": {
+                "clarity": {
+                    "title": "Turning ambiguity into clarity",
+                    "description": "I specialize in taking vague requirements and transforming them into actionable technical approaches."
+                },
+                "culture": {
+                    "title": "Working across cultures and teams",
+                    "description": "From Tokyo to Ho Chi Minh City to Mountain View, I bridge technical possibilities with business realities."
+                },
+                "tradeoffs": {
+                    "title": "Making informed trade-offs",
+                    "description": "I evaluate solutions based on long-term maintainability, team ramp-up time, and business impact."
+                },
+                "ai": {
+                    "title": "AI as Collaborator",
+                    "description": "I embrace AI as a collaborator that amplifies human creativity and judgment."
+                }
+            }
+        },
+        "work": {
+            "title": "Selected Work",
+            "labels": {
+                "problem": "Problem",
+                "constraints": "Constraints",
+                "decisions": "Key Decisions",
+                "impact": "Impact",
+                "visit": "Visit Website →"
+            },
+            "projects": {
+                "vnlocals": {
+                    "title": "VN Locals",
+                    "role": "Founder & Full-stack Developer",
+                    "context": "Platform connecting travelers with authentic local experiences in Vietnam",
+                    "problem": "Tourists struggle to find genuine local experiences beyond typical tourist attractions",
+                    "constraints": "Limited budget as solo founder, need to validate market quickly, build trust with both sides",
+                    "decisions": "Next.js with server components for SEO, Supabase for real-time features, simple booking flow",
+                    "impact": [
+                        "Curated 50+ authentic local experiences",
+                        "200+ successful bookings",
+                        "4.8/5 average rating from travelers"
+                    ],
+                    "tags": [
+                        "Next.js",
+                        "Supabase",
+                        "Travel",
+                        "Marketplace"
+                    ]
+                },
+                "vnmarketinsights": {
+                    "title": "VN Market Insights",
+                    "role": "Founder & Full-stack Developer",
+                    "context": "Data analytics platform providing market intelligence for Vietnam business landscape",
+                    "problem": "Businesses lack accessible, affordable market data for Vietnam market entry decisions",
+                    "constraints": "Data sourcing challenges, need to present complex data simply, bootstrap budget",
+                    "decisions": "Python data pipelines, React with D3.js visualizations, freemium pricing model",
+                    "impact": [
+                        "Aggregated data from 15+ sources",
+                        "500+ registered users",
+                        "Featured in 3 business publications"
+                    ],
+                    "tags": [
+                        "Data Analytics",
+                        "Python",
+                        "D3.js",
+                        "Business Intelligence"
+                    ]
+                },
+                "mystar": {
+                    "title": "MyStar.vn",
+                    "role": "Founder & AI Engineer",
+                    "context": "AI-powered astrology platform generating personalized horoscopes and astrological insights",
+                    "problem": "Traditional astrology consultations are expensive and inaccessible to younger audiences",
+                    "constraints": "AI model accuracy, cultural sensitivity in astrology, building trust in automated readings",
+                    "decisions": "Fine-tuned LLM with astrology datasets, multilingual support, user feedback loop for improvement",
+                    "impact": [
+                        "10K+ personalized readings generated",
+                        "65% return user rate",
+                        "Featured on Vietnamese tech blogs"
+                    ],
+                    "tags": [
+                        "AI/LLM",
+                        "Astrology",
+                        "Vietnamese Market",
+                        "Personalization"
+                    ]
+                },
+                "theorientoracle": {
+                    "title": "The Orient Oracle",
+                    "role": "Founder & AI Engineer",
+                    "context": "AI-driven oriental fortune telling platform combining traditional wisdom with modern technology",
+                    "problem": "Preserving and modernizing traditional Eastern fortune telling practices for digital natives",
+                    "constraints": "Balancing tradition with innovation, multiple fortune telling systems (Bazi, Zi Wei Dou Shu), AI hallucination risks",
+                    "decisions": "Hybrid AI + expert validation system, educational content alongside predictions, community features",
+                    "impact": [
+                        "Support for 4 traditional fortune systems",
+                        "5K+ users across Asia",
+                        "Partnership with 2 traditional masters"
+                    ],
+                    "tags": [
+                        "AI/LLM",
+                        "Fortune Telling",
+                        "Cultural Tech",
+                        "Education"
+                    ]
+                }
+            }
+        },
+        "aiLab": {
+            "title": "Applied AI Playground",
+            "description": "My personal sandbox for exploring AI engineering—building practical AI integrations with cost tracking, observability, and intelligent caching. These demos show how I approach new technologies and build systems that can scale.",
+            "experiments": {
+                "vietnamese-text": {
+                    "name": "Vietnamese Text Analyzer",
+                    "description": "AI-powered sentiment analysis and tone detection for Vietnamese language"
+                },
+                "code-insight": {
+                    "name": "Code Insight Engine",
+                    "description": "Automated code complexity analysis and architecture pattern detection"
+                },
+                "sql-generator": {
+                    "name": "SQL Generator",
+                    "description": "Natural language to SQL query conversion with multi-dialect support"
+                },
+                "data-extractor": {
+                    "name": "Structured Data Extractor",
+                    "description": "Transform free-form text into strict, validated JSON using Zod."
+                },
+                "model-arena": {
+                    "name": "Model Arena",
+                    "description": "Compare responses, cost, and latency across multiple AI models side-by-side."
+                },
+                "intent-classifier": {
+                    "name": "Smart Intent Classifier",
+                    "description": "Convert user natural language into structured intents and actionable parameters."
+                },
+                "robustness-tester": {
+                    "name": "Prompt Robustness Tester",
+                    "description": "Evaluate how AI handles noisy inputs, typos, and adversarial prompt variations."
+                },
+                "cot-reasoning": {
+                    "name": "Chain-of-Thought Reasoning",
+                    "description": "Visualize the multi-step logical reasoning process for complex problem solving."
+                }
+            },
+            "viewAll": "View All Demos →"
+        },
+        "howIWork": {
+            "title": "How I Work",
+            "items": {
+                "product": {
+                    "title": "With Product & Design",
+                    "content": "I believe in collaborative discovery. I participate in user research, contribute to product strategy discussions, and help designers understand technical possibilities and constraints."
+                },
+                "ambiguity": {
+                    "title": "With Ambiguous Requirements",
+                    "content": "Vague requirements are opportunities for deeper understanding. I ask clarifying questions, create concrete examples, and propose small experiments to validate assumptions."
+                },
+                "complex": {
+                    "title": "With Complex Systems",
+                    "content": "Debugging is building mental models of how systems interact. I map dependencies, trace data flows, and look for systemic issues rather than treating symptoms in isolation."
+                },
+                "stakeholders": {
+                    "title": "With Stakeholders",
+                    "content": "Technical excellence matters little if it doesn't solve real problems. I translate technical concepts into business outcomes and explain trade-offs in accessible terms."
+                },
+                "ownership": {
+                    "title": "With Ownership",
+                    "content": "I take responsibility beyond my immediate tasks—considering how my work affects other teams, documenting decisions for future maintainers, and proactively identifying potential issues."
+                },
+                "ai": {
+                    "title": "With AI Tools",
+                    "content": "I embrace AI as a collaborator that amplifies human creativity. While AI accelerates prototyping, the uniquely human skills of systems thinking and strategic decision-making remain essential."
+                }
+            }
+        },
+        "techStack": {
+            "title": "Tech Stack",
+            "frontend": "Frontend Systems",
+            "apis": "APIs & Real-Time",
+            "data": "Data & Tracking",
+            "cloud": "Cloud & Tooling",
+            "disclaimer": "These are tools I'm comfortable with, not a measure of my value or capabilities."
+        },
+        "future": {
+            "title": "Future Direction",
+            "intro": "I'm actively developing my skills in technical leadership, focusing on:",
+            "team": {
+                "title": "Team Development",
+                "description": "Mentoring junior engineers, establishing best practices, creating psychological safety for experimentation and learning."
+            },
+            "strategy": {
+                "title": "Strategic Thinking",
+                "description": "Connecting technical decisions to business outcomes, evaluating long-term implications of architectural choices."
+            },
+            "systems": {
+                "title": "Systems Leadership",
+                "description": "Building platforms that enable other teams to move faster, designing processes that scale, creating tools that multiply human effectiveness."
+            },
+            "conclusion": "As AI becomes more integrated into our workflows, I'm particularly interested in how engineering organizations can evolve to leverage these tools while preserving the human judgment that separates good solutions from great ones."
+        },
+        "contact": {
+            "title": "Get in Touch",
+            "description": "I'm currently exploring opportunities for technical leadership roles—particularly those that involve shaping product direction, mentoring teams, and building systems that stand the test of time.",
+            "location": "Based in Vietnam, open to remote/global opportunities."
+        },
+        "footer": {
+            "role": "Nguyen Van Bo • Frontend / Full-stack Engineer"
+        }
+    },
+    "ExperimentPage": {
+        "backToLab": "← Back to Playground",
+        "tabs": {
+            "run": "Run",
+            "api": "API",
+            "analytics": "Analytics",
+            "iterations": "Iterations",
+            "learnings": "Learnings",
+            "settings": "Settings"
+        },
+        "configure": {
+            "title": "Configure",
+            "subtitle": "Fill in the inputs below"
+        },
+        "emptyState": {
+            "title": "No result yet",
+            "subtitle": "Fill in the form on the left and click \"Analyze\" to get started."
+        },
+        "loading": {
+            "title": "Processing your request...",
+            "subtitle": "This typically takes a few seconds"
+        },
+        "error": {
+            "default": "An error occurred",
+            "failed": "Failed to process request"
+        }
+    },
+    "ApiTab": {
+        "title": "How to call this API",
+        "subtitle": "Use the request below from your script, CLI, or another app.",
+        "endpoint": "Endpoint",
+        "body": "Request body",
+        "bodyHint": "Run the experiment once to use your last request as the example.",
+        "response": "Response",
+        "responseDesc": "Returns JSON: { success, data?, error?, executionId, metadata: { latency, totalTokens, costEstimate, cached, model } }.",
+        "copyCurl": "Copy as cURL",
+        "copyFetch": "Copy as fetch",
+        "copied": "Copied to clipboard",
+        "copyFailed": "Copy failed"
+    },
+    "EmptyStates": {
+        "analytics": {
+            "title": "No metrics yet",
+            "subtitle": "Run an experiment from the Run tab to see latency, cost, and cache stats here."
+        },
+        "iterations": {
+            "title": "No iterations yet",
+            "subtitle": "Create a new prompt version to track changes over time."
+        },
+        "learnings": {
+            "title": "No learnings recorded",
+            "subtitle": "Document what you learn from each run to build a knowledge base."
+        },
+        "learningsPublic": {
+            "title": "No public learnings yet",
+            "subtitle": "Team learnings will appear here when shared."
+        }
+    },
+    "FeedbackPanel": {
+        "rateLabel": "Rate this result",
+        "commentLabel": "Additional feedback (optional)",
+        "commentPlaceholder": "What could be improved?",
+        "submit": "Submit Feedback",
+        "submitting": "Submitting...",
+        "thankYou": "Thank you for your feedback!",
+        "selectRating": "Please select a rating",
+        "submitError": "Failed to submit feedback"
+    },
+    "ExperimentForm": {
+        "draft": {
+            "restored": "Restored draft from {age}",
+            "clear": "Clear"
+        },
+        "buttons": {
+            "analyze": "Analyze",
+            "processing": "Processing..."
+        },
+        "shortcuts": {
+            "submit": "to submit",
+            "close": "to close dialogs"
+        },
+        "vietnamese-text": {
+            "textLabel": "Vietnamese Text",
+            "textPlaceholder": "Enter Vietnamese text to analyze...",
+            "textHelp": "Provide Vietnamese text for sentiment analysis, tone detection, and more.",
+            "instructions": "How to use: Paste any Vietnamese text into the box below. The AI will analyze sentiment, tone, and extract key phrases, providing a comprehensive summary."
+        },
+        "code-insight": {
+            "languageLabel": "Programming Language",
+            "codeLabel": "Code to Analyze",
+            "codePlaceholder": "Paste your code here...",
+            "codeHelp": "Submit code for complexity analysis, architecture review, and performance optimization suggestions.",
+            "instructions": "How to use: Select the programming language, paste your code snippet, and click Analyze. AI will review it for patterns, complexity, and potential improvements."
+        },
+        "sql-generator": {
+            "dialectLabel": "SQL Dialect",
+            "complexityLabel": "Complexity Level",
+            "descriptionLabel": "Query Description",
+            "descriptionPlaceholder": "Describe the query you need in natural language...\nExample: Get all users who signed up in the last 30 days and have made at least 3 orders",
+            "descriptionHelp": "Describe what data you need, any conditions, sorting, or grouping requirements.",
+            "schemaLabel": "Database Schema (Optional)",
+            "schemaPlaceholder": "Paste your table schema here...\nExample:\nusers (id INTEGER, name VARCHAR, email VARCHAR, created_at TIMESTAMP)\norders (id INTEGER, user_id INTEGER, total DECIMAL, created_at TIMESTAMP)",
+            "schemaHelp": "Provide table definitions to get more accurate queries using your actual column names.",
+            "instructions": "How to use: Describe the query you need in plain English. Optionally, provide your database schema (tables/columns) to help the AI generate more precise SQL.",
+            "options": {
+                "generic": "Generic SQL",
+                "simple": "Simple",
+                "medium": "Medium",
+                "complex": "Complex"
+            }
+        },
+        "data-extractor": {
+            "textLabel": "Source Text",
+            "textPlaceholder": "Paste unstructured text here...",
+            "schemaDescriptionLabel": "Extraction Requirements",
+            "schemaDescriptionPlaceholder": "E.g. Extract person names, birth dates, and addresses...",
+            "textHelp": "The text you want to transform into structured JSON.",
+            "schemaDescriptionHelp": "Describe what entities you want the AI to look for.",
+            "instructions": "How to use: Paste any unstructured text (email, article, etc.) into 'Source Text', then describe what you want to extract in 'Extraction Requirements'. The AI will return clean, structured JSON."
+        },
+        "model-arena": {
+            "promptRequestedLabel": "Test Prompt",
+            "promptRequestedPlaceholder": "Enter the prompt to compare across models...",
+            "modelsToCompareLabel": "Models to Compare",
+            "promptRequestedHelp": "This prompt will be sent to multiple models for comparison.",
+            "instructions": "How to use: Enter a 'Test Prompt' you want to benchmark. Select at least 2 models. You will see side-by-side responses with analysis of strengths and weaknesses for each model."
+        },
+        "intent-classifier": {
+            "userInputLabel": "User Command",
+            "userInputPlaceholder": "E.g. Book a flight to London tomorrow...",
+            "contextLabel": "Context",
+            "userInputHelp": "Enter a natural language command for the AI to classify.",
+            "instructions": "How to use: Enter a natural user command. The AI will classify the intent, determine priority, and extract parameters needed to execute the action."
+        },
+        "robustness-tester": {
+            "basePromptLabel": "Base Prompt",
+            "basePromptPlaceholder": "Enter the prompt you want to test for robustness...",
+            "perturbationTypeLabel": "Perturbation Type",
+            "options": {
+                "typos": "Typos",
+                "slang": "Slang",
+                "adversarial": "Adversarial",
+                "none": "None"
+            },
+            "instructions": "How to use: Enter a standard prompt. Select a 'Perturbation Type' (e.g., Typos). The AI will automatically alter your prompt and test if the model remains resilient and accurate."
+        },
+        "cot-reasoning": {
+            "problemLabel": "Problem to Solve",
+            "problemPlaceholder": "Enter a logic puzzle or complex problem...",
+            "complexityLabel": "Complexity",
+            "options": {
+                "low": "Low",
+                "medium": "Medium",
+                "high": "High"
+            },
+            "instructions": "How to use: Enter a logic puzzle or a complex problem. The AI will clearly visualize each step of its thought process before arriving at the final answer."
+        },
+        "costEstimator": {
+            "title": "Estimated Cost",
+            "tooltip": "Estimates cost based on input length + potential max output. Daily limit: ${limit}",
+            "tokens": "~{count} input tokens",
+            "overLimit": "Exceeds limit! Shorten input or switch model.",
+            "errorCalculation": "Cost estimation unavailable"
+        },
+        "modelSelector": {
+            "label": "AI Model",
+            "placeholder": "Select a model...",
+            "help": "Different models have different capabilities and costs."
+        }
+    },
+    "ResultDisplay": {
+        "actions": {
+            "copyResult": "Copy Result",
+            "copied": "Copied!",
+            "exportJson": "Export JSON",
+            "shareLink": "Share Link",
+            "qrCode": "QR Code",
+            "favorite": "Favorite",
+            "favorited": "Favorited",
+            "save": "Save",
+            "cancel": "Cancel",
+            "close": "Close",
+            "scanToOpen": "Scan to Open",
+            "scanInstruction": "Scan this QR code with your phone camera to open this result on mobile",
+            "copyLink": "Copy Link",
+            "copyCode": "Copy",
+            "enterTitle": "Enter a title for this favorite..."
+        },
+        "metadata": {
+            "latency": "Latency",
+            "tokens": "Tokens",
+            "cost": "Cost",
+            "cache": "Cache",
+            "hit": "Hit",
+            "miss": "Miss"
+        },
+        "toast": {
+            "copied": "Copied to clipboard",
+            "linkCopied": "Share link copied"
+        },
+        "error": {
+            "retry": "Retry",
+            "retryIn": "Retry in {seconds}s",
+            "rate_limit": {
+                "title": "Too many requests",
+                "suggestion": "Wait a moment, then try again. Limit is 5 requests per minute per IP."
+            },
+            "budget": {
+                "title": "Daily budget reached",
+                "suggestion": "The daily spending limit has been reached. Try again tomorrow or adjust the limit in the server config."
+            },
+            "validation": {
+                "title": "Invalid input",
+                "suggestion": "Check the form fields and fix the errors below."
+            },
+            "api_key": {
+                "title": "API configuration",
+                "suggestion": "Add an API key in Settings (gear icon) or use your own key (BYOK)."
+            },
+            "server": {
+                "title": "Something went wrong",
+                "suggestion": "Try again in a moment or check your connection."
+            }
+        },
+        "sections": {
+            "error": "Execution Error",
+            "results": "Analysis Results",
+            "keyPhrases": "Key Phrases",
+            "generatedSql": "Generated SQL Query",
+            "explanation": "Explanation",
+            "parameters": "Query Parameters",
+            "warnings": "Warnings & Considerations",
+            "alternatives": "Alternative Approaches"
+        },
+        "fields": {
+            "sentiment": "Sentiment",
+            "tone": "Tone",
+            "summary": "Summary",
+            "rewrite": "Rewrite",
+            "complexity": "Complexity",
+            "architecture": "Architecture",
+            "refactorHints": "Refactor Hints",
+            "antiPatterns": "Anti-patterns",
+            "performanceTips": "Performance Tips"
+        }
+    },
+    "Experiments": {
+        "vietnamese-text": {
+            "name": "Vietnamese Text Analyzer",
+            "description": "AI-powered sentiment analysis and tone detection for Vietnamese language"
+        },
+        "code-insight": {
+            "name": "Code Insight Engine",
+            "description": "Automated code complexity analysis and architecture pattern detection"
+        },
+        "sql-generator": {
+            "name": "SQL Generator",
+            "description": "Natural language to SQL query conversion with multi-dialect support"
+        },
+        "data-extractor": {
+            "name": "Structured Data Extractor",
+            "description": "Transform free-form text into strict, validated JSON using Zod."
+        },
+        "model-arena": {
+            "name": "Model Arena",
+            "description": "Compare responses, cost, and latency across multiple AI models side-by-side."
+        },
+        "intent-classifier": {
+            "name": "Smart Intent Classifier",
+            "description": "Convert user natural language into structured intents and actionable parameters."
+        },
+        "robustness-tester": {
+            "name": "Prompt Robustness Tester",
+            "description": "Evaluate how AI handles noisy inputs, typos, and adversarial prompt variations."
+        },
+        "cot-reasoning": {
+            "name": "Chain-of-Thought Reasoning",
+            "description": "Visualize the multi-step logical reasoning process for complex problem solving."
+        }
+    },
+    "UserGuide": {
+        "trigger": "How to use?",
+        "home": {
+            "title": "Welcome to the AI Lab",
+            "sections": {
+                "what": {
+                    "heading": "What is this?",
+                    "content": "This is a developer-centric sandbox for testing production-grade AI integration patterns. Each experiment demonstrates a specific use case, complete with cost estimation, performance metrics, and caching strategies."
+                },
+                "quickStart": {
+                    "heading": "Quick Start",
+                    "content": "1. Pick an experiment from the left.\n2. Adjust the settings or use the default input.\n3. Hit 'Analyze' to see the AI in action.\n4. Explore the 'Analytics' and 'History' tags to see what happened under the hood."
+                },
+                "whatYouGet": {
+                    "heading": "What you get",
+                    "content": "Every request is fully instrumented. You get side-by-side results, token counts, latency breakdowns, and estimated costs. Plus, we show you the 'Thought Process' for most experiments."
+                },
+                "explained": {
+                    "heading": "Experiments Explained",
+                    "content": "Choose from tools like the SQL Generator, Code Insight Engine, or Structured Data Extractor. Each one is built with a specific architecture pattern (e.g., Zod validation, Prompt versioning)."
+                },
+                "tips": {
+                    "heading": "Pro Tips",
+                    "content": "• Use your own API keys in Settings to bypass daily limits.\n• Check the 'View Architecture' page to see how the system is built.\n• Most results can be copied or shared with others."
+                }
+            }
+        },
+        "experiments": {
+            "vietnamese-text": {
+                "title": "Vietnamese Text Analysis Guide",
+                "sections": {
+                    "what": {
+                        "heading": "What it does",
+                        "content": "Analyzes Vietnamese text for sentiment (Positive/Negative/Neutral), detects tone, and extracts key keywords relevant to the context."
+                    },
+                    "how": {
+                        "heading": "How to use",
+                        "content": "Paste any Vietnamese text (comments, articles, etc.). The AI uses language-specific prompt engineering to understand nuances and dialects."
+                    },
+                    "examples": {
+                        "heading": "Try these",
+                        "content": "• 'Dùng rất ổn, giá cả phải chăng.'\n• 'Chất lượng quá kém, không bao giờ quay lại!'"
+                    },
+                    "cost": {
+                        "heading": "Cost efficiency",
+                        "content": "This model is highly optimized. We recommend using 'gpt-4o-mini' for high volume sentiment analysis to save costs while maintaining accuracy."
+                    }
+                }
+            },
+            "code-insight": {
+                "title": "Code Insight Guide",
+                "sections": {
+                    "what": {
+                        "heading": "What it does",
+                        "content": "Deeply analyzes code architecture, detects smells, and provides actionable refactoring suggestions."
+                    },
+                    "how": {
+                        "heading": "How to use",
+                        "content": "Select your language and paste a function or class. The AI evaluates complexity and suggests design pattern improvements."
+                    },
+                    "bestPractices": {
+                        "heading": "Best Practices",
+                        "content": "Submit logical units (like a single class or complex function) rather than raw files for the best accuracy."
+                    },
+                    "cost": {
+                        "heading": "Context tips",
+                        "content": "Large files consume more tokens. Use 'Claude 3.5 Sonnet' for complex architecture logic as it has a larger context window."
+                    }
+                }
+            },
+            "sql-generator": {
+                "title": "SQL Generator Guide",
+                "sections": {
+                    "what": {
+                        "heading": "What it does",
+                        "content": "Converts natural language descriptions into valid, dialect-specific SQL queries."
+                    },
+                    "how": {
+                        "heading": "How to use",
+                        "content": "Describe your goal (e.g., 'Get top 5 customers'). Adding your schema (table definitions) makes the output significantly more accurate."
+                    },
+                    "examples": {
+                        "heading": "Examples",
+                        "content": "• 'Find users who signed up last week'\n• 'Calculate average revenue per month per category'"
+                    },
+                    "schema": {
+                        "heading": "Schema Power",
+                        "content": "If you provide table names and columns, the AI will use your actual database structure instead of guessing."
+                    }
+                }
+            },
+            "data-extractor": {
+                "title": "Structured Data Extractor Guide",
+                "sections": {
+                    "what": {
+                        "heading": "What it does",
+                        "content": "Turns messy, unstructured text into clean JSON data based on your requirements."
+                    },
+                    "how": {
+                        "heading": "How it works",
+                        "content": "We use a 'Strict Output' pattern. This ensures the result matches your JSON schema perfectly, or it returns an error."
+                    },
+                    "bestPractices": {
+                        "heading": "Best Practices",
+                        "content": "Be specific in your 'Extraction Requirements'. Mention data types (e.g., 'extract dates as ISO strings')."
+                    }
+                }
+            },
+            "model-arena": {
+                "title": "Model Arena Guide",
+                "sections": {
+                    "what": {
+                        "heading": "What it does",
+                        "content": "Runs the same prompt across multiple models side-by-side to compare latency, cost, and quality."
+                    },
+                    "how": {
+                        "heading": "Why use it?",
+                        "content": "Ideal for benchmarking during development. You can see which model gives the best response for your specific prompt before committing."
+                    },
+                    "useCases": {
+                        "heading": "Use Cases",
+                        "content": "Compare GPT-4o vs Claude 3.5 vs Llama 3 to find the sweet spot between intelligence and price."
+                    }
+                }
+            },
+            "intent-classifier": {
+                "title": "Intent Classifier Guide",
+                "sections": {
+                    "what": {
+                        "heading": "What it does",
+                        "content": "Determines the 'Intent' behind a user command and extracts the necessary action parameters."
+                    },
+                    "how": {
+                        "heading": "How to use",
+                        "content": "Perfect for building chat bots or voice assistants. It maps natural language (e.g., 'Book a ride') to a code-friendly action (e.g., 'BOOK_VEHICLE')."
+                    }
+                }
+            },
+            "robustness-tester": {
+                "title": "Robustness Tester Guide",
+                "sections": {
+                    "what": {
+                        "heading": "What it does",
+                        "content": "Tests if your AI prompts are 'bulletproof' by injecting noise, typos, and adversarial variations."
+                    },
+                    "how": {
+                        "heading": "Why it matters",
+                        "content": "In production, users don't always type perfectly. This tool helps you ensure your AI remains reliable even with messy input."
+                    }
+                }
+            },
+            "cot-reasoning": {
+                "title": "Chain-of-Thought Guide",
+                "sections": {
+                    "what": {
+                        "heading": "What it does",
+                        "content": "Forces the AI to 'think out loud' step-by-step before giving the final answer."
+                    },
+                    "how": {
+                        "heading": "Why use it?",
+                        "content": "Improves accuracy for logic puzzles, math, and complex decision making. It makes the AI's reasoning fully transparent to you."
+                    }
+                }
+            }
+        },
+        "footer": {
+            "tip": "Tip: You can use these patterns in your own apps!",
+            "close": "Got it"
+        }
+    }
+}

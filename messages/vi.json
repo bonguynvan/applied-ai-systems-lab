@@ -1,0 +1,859 @@
+{
+    "HomePage": {
+        "title": "Sân chơi AI Ứng dụng",
+        "description": "Nơi các lập trình viên khám phá các mẫu tích hợp AI thực tế. Bao gồm theo dõi chi phí, khả năng quan sát và cache thông minh.",
+        "availableDemos": "Các Demo có sẵn"
+    },
+    "Navigation": {
+        "architecture": "Xem Kiến trúc",
+        "portfolio": "Hồ sơ năng lực",
+        "features": "Tính năng tích hợp",
+        "techStack": "Công nghệ sử dụng"
+    },
+    "SettingsModal": {
+        "title": "Cài đặt API Key cá nhân",
+        "description": "Cấu hình API key của riêng bạn để sử dụng hệ thống với hạn mức và chi phí cá nhân.",
+        "privacyNote": "Mã khóa của bạn chỉ được lưu trữ trong trình duyệt (localStorage) và không bao giờ rời khỏi thiết bị này, ngoại trừ khi gửi trực tiếp đến nhà cung cấp AI qua cổng API bảo mật của chúng tôi.",
+        "localOnly": "Lưu trữ cục bộ",
+        "saved": "Đã lưu cài đặt!",
+        "saveAction": "Lưu thay đổi"
+    },
+    "ArchitecturePage": {
+        "backHome": "← Quay lại sân chơi",
+        "title": "Cơ chế hoạt động",
+        "description": "Tổng quan kỹ thuật về các mẫu thiết kế và tích hợp",
+        "requestLifecycle": {
+            "title": "Vòng đời yêu cầu",
+            "steps": {
+                "clientSubmit": "Máy khách gửi biểu mẫu với thông tin đầu vào",
+                "validateInput": "Xác thực đầu vào theo lược đồ Zod",
+                "hashInput": "Băm đầu vào để tạo khóa cache",
+                "checkCache": "Kiểm tra cache trong bộ nhớ",
+                "hit": "HIT: Trả về kết quả từ cache",
+                "miss": "MISS: Tiếp tục gọi AI",
+                "generatePrompt": "Tạo prompt từ mẫu",
+                "callAi": "Gọi Orchestrator.callAI()",
+                "estimateTokens": "Ước tính token & chi phí",
+                "attemptApi": "Thử gọi API với cơ chế thử lại",
+                "parseResponse": "Phân tích và xác thực phản hồi",
+                "cacheResult": "Lưu cache (TTL 24h)",
+                "logEvent": "Ghi log sự kiện với số liệu",
+                "returnResponse": "Trả về phản hồi + metadata",
+                "displayResult": "Máy khách hiển thị kết quả"
+            }
+        },
+        "layers": {
+            "title": "Các tầng kiến trúc",
+            "presentation": {
+                "title": "Tầng trình bày",
+                "description": "Các thành phần React để nhập liệu và hiển thị kết quả",
+                "form": "Tạo & xác thực biểu mẫu",
+                "display": "Trực quan hóa kết quả",
+                "page": "Điều phối trang"
+            },
+            "api": {
+                "title": "API & Route Handlers",
+                "description": "Next.js 16 route handlers với xử lý phía server",
+                "validate": "Xác thực đầu vào",
+                "checkCache": "Kiểm tra cache",
+                "callOrchestrator": "Gọi bộ điều phối",
+                "logMetrics": "Ghi số liệu"
+            },
+            "core": {
+                "title": "Dịch vụ cốt lõi",
+                "description": "Logic nghiệp vụ và tích hợp",
+                "orchestrator": {
+                    "title": "Lớp tích hợp AI",
+                    "provider": "Trừu tượng hóa API đa nhà cung cấp",
+                    "retry": "Tự động thử lại với lùi mũ (exponential backoff)",
+                    "cost": "Ước tính token & tính toán chi phí"
+                },
+                "cache": {
+                    "title": "Quản lý Cache",
+                    "hash": "Băm đầu vào SHA-256",
+                    "ttl": "Hết hạn dựa trên TTL"
+                },
+                "logger": {
+                    "title": "Logger",
+                    "structured": "Ghi log sự kiện có cấu trúc",
+                    "metrics": "Theo dõi số liệu thực nghiệm"
+                }
+            },
+            "experiment": {
+                "title": "Hệ thống Demo",
+                "description": "Định nghĩa demo dạng module với phiên bản",
+                "schema": "Xác thực đầu vào/đầu ra Zod",
+                "prompt": "Mẫu prompt có phiên bản",
+                "handler": "Phân tích phản hồi",
+                "module": "Xuất module"
+            }
+        },
+        "dataFlow": {
+            "title": "Sơ đồ dòng dữ liệu"
+        },
+        "typeSafety": {
+            "title": "An toàn kiểu & Xác thực",
+            "description": "An toàn kiểu toàn diện sử dụng TypeScript và lược đồ Zod",
+            "input": {
+                "title": "Xác thực đầu vào",
+                "description": "Mỗi demo định nghĩa lược đồ đầu vào để xác thực:",
+                "required": "Sự hiện diện của trường bắt buộc",
+                "type": "Tính đúng đắn của kiểu (chuỗi, enum, v.v.)",
+                "length": "Ràng buộc độ dài (min/max)",
+                "custom": "Quy tắc xác thực tùy chỉnh"
+            },
+            "output": {
+                "title": "Xác thực đầu ra",
+                "description": "Phản hồi AI được xác thực theo lược đồ đầu ra để đảm bảo:",
+                "structure": "Cấu trúc JSON chính xác",
+                "enum": "Giá trị enum hợp lệ",
+                "shapes": "Hình dạng mảng và đối tượng",
+                "coercion": "Ép kiểu khi thích hợp"
+            }
+        },
+        "extensibility": {
+            "title": "Thêm Demo mới",
+            "description": "Tạo thực nghiệm mới yêu cầu ít mã và không thay đổi cốt lõi:",
+            "steps": {
+                "1": "Tạo schema.ts với định nghĩa Zod",
+                "2": "Tạo prompt.ts với các hàm mẫu",
+                "3": "Tạo handler.ts để phân tích phản hồi",
+                "4": "Xuất module từ index.ts",
+                "5": "Đăng ký trong config/experiments.ts",
+                "1_desc": "Định nghĩa inputSchema và outputSchema",
+                "2_desc": "Hỗ trợ quản lý phiên bản",
+                "3_desc": "Phân tích JSON và xác thực lược đồ",
+                "4_desc": "Kết hợp tất cả các phần với metadata",
+                "5_desc": "Thêm vào EXPERIMENTS_REGISTRY"
+            }
+        },
+        "performance": {
+            "title": "Hiệu năng & Tối ưu hóa",
+            "caching": {
+                "title": "Caching",
+                "ttl": "TTL mặc định 24 giờ",
+                "keys": "Khóa cache SHA-256",
+                "expiration": "Tự động hết hạn",
+                "memory": "Trong bộ nhớ (Sẵn sàng cho Redis)"
+            },
+            "resilience": {
+                "title": "Khả năng phục hồi",
+                "retry": "Thử lại với lùi mũ",
+                "timeout": "Thời gian chờ yêu cầu 30s",
+                "handling": "Xử lý lỗi nhẹ nhàng",
+                "logging": "Ghi log có cấu trúc"
+            }
+        }
+    },
+    "LanguageSwitcher": {
+        "switchLanguage": "Đổi ngôn ngữ"
+    },
+    "SharePage": {
+        "loading": "Đang tải kết quả chia sẻ...",
+        "invalidLink": {
+            "title": "Liên kết không hợp lệ",
+            "noData": "Không tìm thấy dữ liệu chia sẻ trong URL",
+            "corrupted": "Liên kết chia sẻ không hợp lệ hoặc bị hỏng",
+            "goHome": "Về trang chủ"
+        },
+        "backToLab": "Quay lại Sân chơi",
+        "sharedResult": "Kết quả được chia sẻ",
+        "tryExperiment": "Thử nghiệm này",
+        "reproduce": "Chạy lại với cùng đầu vào",
+        "sharedAt": "Đã chia sẻ {date}",
+        "analysisResults": "Kết quả phân tích",
+        "error": "Lỗi",
+        "resultData": "Dữ liệu kết quả",
+        "cta": {
+            "text": "Bạn muốn tự thử nghiệm này?",
+            "button": "Chạy thử nghiệm này"
+        },
+        "metadata": {
+            "latency": "Độ trễ",
+            "tokens": "Token",
+            "cost": "Chi phí",
+            "cache": "Cache",
+            "hit": "Hit",
+            "miss": "Miss"
+        }
+    },
+    "PortfolioPage": {
+        "metadata": {
+            "title": "Nguyễn Văn Bộ | Kỹ sư Frontend / Full-stack",
+            "description": "Kỹ sư Frontend / Full-stack với hơn 6 năm kinh nghiệm trong Fintech, SaaS và Enterprise. Tư duy hệ thống, Techlead."
+        },
+        "nav": {
+            "back": "← Quay lại AI Lab"
+        },
+        "hero": {
+            "role": "Kỹ sư Frontend / Full-stack | Tư duy hệ thống | Techlead",
+            "title": "Tôi thiết kế và xây dựng các hệ thống frontend có khả năng mở rộng—về sản phẩm, đội ngũ và độ phức tạp.",
+            "description": "Hơn 6 năm kinh nghiệm xây dựng sản phẩm trong lĩnh vực Fintech, SaaS và Enterprise\nHiện tập trung vào các dự án cá nhân: Nền tảng AI và sản phẩm dựa trên dữ liệu\nĐang ở Việt Nam, sẵn sàng cho các cơ hội toàn cầu/từ xa",
+            "viewWork": "Xem các dự án",
+            "howIThink": "Triết lý làm việc"
+        },
+        "philosophy": {
+            "title": "Cách tiếp cận của tôi",
+            "intro1": "Sau sáu năm xây dựng sản phẩm tại các startup và môi trường doanh nghiệp, tôi chuyển sang xây dựng các dự án riêng. Từ nền tảng chiêm tinh học tích hợp AI đến công cụ thông tin thị trường, tôi đam mê tạo ra các sản phẩm giải quyết vấn đề thực tế tại điểm giao thoa của công nghệ và văn hóa.",
+            "intro2": "Sự trỗi dậy của AI đã mở ra những khả năng mới cho các nhà sáng lập độc lập. Tôi học cách tận dụng LLM không chỉ như công cụ, mà là yếu tố cốt lõi tạo nên sự khác biệt của sản phẩm—dù là tạo lá số tử vi cá nhân hóa hay dân chủ hóa dữ liệu thị trường cho doanh nghiệp Việt.",
+            "guidesTitle": "Nguyên tắc dẫn lối",
+            "guides": {
+                "clarity": {
+                    "title": "Biến sự mơ hồ thành rõ ràng",
+                    "description": "Tôi chuyên chuyển đổi các yêu cầu mơ hồ thành các phương pháp kỹ thuật khả thi và hành động được."
+                },
+                "culture": {
+                    "title": "Làm việc đa văn hóa và đội nhóm",
+                    "description": "Từ Tokyo đến TP.HCM hay Mountain View, tôi kết nối các khả năng kỹ thuật với thực tế kinh doanh."
+                },
+                "tradeoffs": {
+                    "title": "Đưa ra các đánh đổi sáng suốt",
+                    "description": "Tôi đánh giá các giải pháp dựa trên khả năng bảo trì lâu dài, thời gian làm quen của đội ngũ và tác động kinh doanh."
+                },
+                "ai": {
+                    "title": "AI là cộng sự",
+                    "description": "Tôi coi AI là một cộng sự giúp khuếch đại sự sáng tạo và phán đoán của con người."
+                }
+            }
+        },
+        "work": {
+            "title": "Dự án tiêu biểu",
+            "labels": {
+                "problem": "Vấn đề",
+                "constraints": "Ràng buộc",
+                "decisions": "Quyết định chính",
+                "impact": "Tác động",
+                "visit": "Ghé thăm Website →"
+            },
+            "projects": {
+                "vnlocals": {
+                    "title": "VN Locals",
+                    "role": "Founder & Full-stack Developer",
+                    "context": "Nền tảng kết nối du khách với trải nghiệm địa phương đích thực tại Việt Nam",
+                    "problem": "Du khách gặp khó khăn trong việc tìm kiếm trải nghiệm địa phương thực sự ngoài các điểm du lịch thông thường",
+                    "constraints": "Ngân sách hạn chế của founder độc lập, cần kiểm chứng thị trường nhanh, xây dựng niềm tin với cả hai phía",
+                    "decisions": "Next.js với server components cho SEO, Supabase cho tính năng thời gian thực, luồng đặt chỗ đơn giản",
+                    "impact": [
+                        "Tuyển chọn 50+ trải nghiệm địa phương đích thực",
+                        "200+ lượt đặt thành công",
+                        "Đánh giá trung bình 4.8/5 từ du khách"
+                    ],
+                    "tags": [
+                        "Next.js",
+                        "Supabase",
+                        "Travel",
+                        "Marketplace"
+                    ]
+                },
+                "vnmarketinsights": {
+                    "title": "VN Market Insights",
+                    "role": "Founder & Full-stack Developer",
+                    "context": "Nền tảng phân tích dữ liệu cung cấp thông tin thị trường cho bối cảnh kinh doanh tại Việt Nam",
+                    "problem": "Doanh nghiệp thiếu dữ liệu thị trường dễ tiếp cận, giá cả phải chăng để ra quyết định gia nhập thị trường Việt Nam",
+                    "constraints": "Thách thức về nguồn dữ liệu, cần trình bày dữ liệu phức tạp một cách đơn giản, ngân sách tự thân",
+                    "decisions": "Data pipeline bằng Python, React với biểu đồ D3.js, mô hình giá freemium",
+                    "impact": [
+                        "Tổng hợp dữ liệu từ 15+ nguồn",
+                        "500+ người dùng đăng ký",
+                        "Được giới thiệu trên 3 ấn phẩm kinh doanh"
+                    ],
+                    "tags": [
+                        "Data Analytics",
+                        "Python",
+                        "D3.js",
+                        "Business Intelligence"
+                    ]
+                },
+                "mystar": {
+                    "title": "MyStar.vn",
+                    "role": "Founder & Full-stack Developer",
+                    "context": "Nền tảng chiêm tinh học tích hợp AI tạo ra lá số tử vi cá nhân hóa và thông tin chiêm tinh",
+                    "problem": "Tư vấn chiêm tinh truyền thống đắt đỏ và khó tiếp cận với người trẻ",
+                    "constraints": "Độ chính xác của mô hình AI, sự nhạy cảm văn hóa trong chiêm tinh, xây dựng niềm tin vào kết quả tự động",
+                    "decisions": "Fine-tune LLM với dữ liệu chiêm tinh, hỗ trợ đa ngôn ngữ, vòng lặp phản hồi người dùng để cải thiện",
+                    "impact": [
+                        "Tạo ra 10K+ bài đọc cá nhân hóa",
+                        "Tỷ lệ người dùng quay lại 65%",
+                        "Được giới thiệu trên các blog công nghệ Việt Nam"
+                    ],
+                    "tags": [
+                        "AI/LLM",
+                        "Astrology",
+                        "Thị trường Việt Nam",
+                        "Cá nhân hóa"
+                    ]
+                },
+                "theorientoracle": {
+                    "title": "The Orient Oracle",
+                    "role": "Founder & Full-stack Developer",
+                    "context": "Nền tảng bói toán phương Đông dựa trên AI kết hợp trí tuệ truyền thống với công nghệ hiện đại",
+                    "problem": "Bảo tồn và hiện đại hóa các thực hành bói toán phương Đông truyền thống cho thế hệ số",
+                    "constraints": "Cân bằng giữa truyền thống và đổi mới, nhiều hệ thống bói toán (Bát tự, Tử vi đẩu số), rủi ro ảo giác AI",
+                    "decisions": "Hệ thống lai AI + xác thực chuyên gia, nội dung giáo dục đi kèm dự đoán, tính năng cộng đồng",
+                    "impact": [
+                        "Hỗ trợ 4 hệ thống bói toán truyền thống",
+                        "5K+ người dùng trên khắp châu Á",
+                        "Hợp tác với 2 thầy phong thủy truyền thống"
+                    ],
+                    "tags": [
+                        "AI/LLM",
+                        "Bói toán",
+                        "Công nghệ văn hóa",
+                        "Giáo dục"
+                    ]
+                }
+            }
+        },
+        "aiLab": {
+            "title": "Sân chơi AI Ứng dụng",
+            "description": "Nơi tôi khám phá kỹ thuật AI—xây dựng các tích hợp AI thực tế với theo dõi chi phí, khả năng quan sát và bộ nhớ đệm thông minh. Các demo này chứng minh cách tôi tiếp cận công nghệ mới và xây dựng hệ thống có khả năng mở rộng.",
+            "experiments": {
+                "vietnamese-text": {
+                    "name": "Phân tích văn bản tiếng Việt",
+                    "description": "Phân tích cảm xúc và phát hiện giọng điệu cho tiếng Việt bằng AI"
+                },
+                "code-insight": {
+                    "name": "Công cụ Code Insight",
+                    "description": "Phân tích độ phức tạp mã nguồn và phát hiện mẫu kiến trúc tự động"
+                },
+                "sql-generator": {
+                    "name": "SQL Generator",
+                    "description": "Chuyển đổi ngôn ngữ tự nhiên sang truy vấn SQL với hỗ trợ đa phương ngữ"
+                },
+                "data-extractor": {
+                    "name": "Trích xuất Dữ liệu Có cấu trúc",
+                    "description": "Chuyển đổi văn bản tự do thành JSON có cấu trúc chặt chẽ bằng Zod."
+                },
+                "model-arena": {
+                    "name": "Đấu trường Model",
+                    "description": "So sánh side-by-side phản hồi, chi phí và độ trễ giữa nhiều AI model."
+                },
+                "intent-classifier": {
+                    "name": "Phân loại Ý định Thông minh",
+                    "description": "Chuyển lệnh ngôn ngữ tự nhiên thành ý định và tham số hành động."
+                },
+                "robustness-tester": {
+                    "name": "Kiểm tra Độ bền Prompt",
+                    "description": "Đánh giá cách AI xử lý nhiễu, lỗi đánh máy và biến thể đối nghịch."
+                },
+                "cot-reasoning": {
+                    "name": "Suy luận Chain-of-Thought",
+                    "description": "Trực quan hóa quá trình suy luận logic từng bước cho các bài toán phức tạp."
+                }
+            },
+            "viewAll": "Xem tất cả Demo →"
+        },
+        "howIWork": {
+            "title": "Cách tôi làm việc",
+            "items": {
+                "product": {
+                    "title": "Với Sản phẩm & Thiết kế",
+                    "content": "Tôi tin vào sự khám phá cộng tác. Tôi tham gia nghiên cứu người dùng, đóng góp vào thảo luận chiến lược sản phẩm và giúp các nhà thiết kế hiểu các khả năng và ràng buộc kỹ thuật."
+                },
+                "ambiguity": {
+                    "title": "Với Yêu cầu mơ hồ",
+                    "content": "Yêu cầu mơ hồ là cơ hội để hiểu sâu hơn. Tôi đặt câu hỏi làm rõ, tạo ví dụ cụ thể và đề xuất các thử nghiệm nhỏ để kiểm chứng giả định."
+                },
+                "complex": {
+                    "title": "Với Hệ thống phức tạp",
+                    "content": "Gỡ lỗi là xây dựng mô hình tư duy về cách các hệ thống tương tác. Tôi lập bản đồ phụ thuộc, theo dõi luồng dữ liệu và tìm kiếm các vấn đề hệ thống thay vì chỉ xử lý triệu chứng đơn lẻ."
+                },
+                "stakeholders": {
+                    "title": "Với Các bên liên quan",
+                    "content": "Sự xuất sắc về kỹ thuật chẳng có ý nghĩa gì nếu không giải quyết được vấn đề thực tế. Tôi dịch các khái niệm kỹ thuật thành kết quả kinh doanh và giải thích các đánh đổi bằng ngôn ngữ dễ hiểu."
+                },
+                "ownership": {
+                    "title": "Với Tinh thần làm chủ",
+                    "content": "Tôi chịu trách nhiệm vượt ra ngoài nhiệm vụ trực tiếp—cân nhắc công việc của mình ảnh hưởng thế nào đến đội nhóm khác, tài liệu hóa quyết định cho người bảo trì tương lai và chủ động xác định rủi ro tiềm ẩn."
+                },
+                "ai": {
+                    "title": "Với Công cụ AI",
+                    "content": "Tôi đón nhận AI như một cộng sự giúp khuếch đại sự sáng tạo của con người. Trong khi AI tăng tốc tạo nguyên mẫu, các kỹ năng đặc thù của con người như tư duy hệ thống và ra quyết định chiến lược vẫn là thiết yếu."
+                }
+            }
+        },
+        "techStack": {
+            "title": "Tech Stack",
+            "frontend": "Hệ thống Frontend",
+            "apis": "API & Thời gian thực",
+            "data": "Dữ liệu & Theo dõi",
+            "cloud": "Cloud & Công cụ",
+            "disclaimer": "Đây là các công cụ tôi sử dụng thành thạo, không phải là thước đo giá trị hay năng lực của tôi."
+        },
+        "future": {
+            "title": "Định hướng tương lai",
+            "intro": "Tôi đang tích cực phát triển các kỹ năng Techlead, tập trung vào:",
+            "team": {
+                "title": "Phát triển đội ngũ",
+                "description": "Mentoring kỹ sư trẻ, thiết lập các thực hành tốt nhất, tạo sự an toàn tâm lý cho việc thử nghiệm và học hỏi."
+            },
+            "strategy": {
+                "title": "Tư duy chiến lược",
+                "description": "Kết nối các quyết định kỹ thuật với kết quả kinh doanh, đánh giá tác động lâu dài của các lựa chọn kiến trúc."
+            },
+            "systems": {
+                "title": "Lãnh đạo hệ thống",
+                "description": "Xây dựng nền tảng giúp các đội nhóm khác đi nhanh hơn, thiết kế quy trình có khả năng mở rộng, tạo công cụ nhân rộng hiệu quả của con người."
+            },
+            "conclusion": "Khi AI ngày càng tích hợp sâu vào quy trình làm việc, tôi đặc biệt quan tâm đến cách các tổ chức kỹ thuật có thể tiến hóa để tận dụng các công cụ này trong khi vẫn giữ gìn phán đoán con người—thứ phân biệt giải pháp tốt và giải pháp tuyệt vời."
+        },
+        "contact": {
+            "title": "Liên hệ",
+            "description": "Tôi đang tìm kiếm cơ hội cho vị trí Techlead—đặc biệt là những vai trò liên quan đến định hình hướng đi sản phẩm, mentoring đội nhóm và xây dựng hệ thống bền vững theo thời gian.",
+            "location": "Đang ở Việt Nam, sẵn sàng cho các cơ hội toàn cầu/từ xa."
+        },
+        "footer": {
+            "role": "Nguyễn Văn Bộ • Kỹ sư Frontend / Full-stack"
+        }
+    },
+    "ExperimentPage": {
+        "backToLab": "← Quay lại Sân chơi",
+        "tabs": {
+            "run": "Chạy",
+            "api": "API",
+            "analytics": "Phân tích",
+            "iterations": "Lịch sử",
+            "learnings": "Bài học",
+            "settings": "Cài đặt"
+        },
+        "configure": {
+            "title": "Cấu hình",
+            "subtitle": "Điền thông tin bên dưới"
+        },
+        "emptyState": {
+            "title": "Chưa có kết quả",
+            "subtitle": "Điền thông tin vào biểu mẫu bên trái và nhấn \"Phân tích\" để bắt đầu."
+        },
+        "loading": {
+            "title": "Đang xử lý yêu cầu...",
+            "subtitle": "Quá trình này thường mất vài giây"
+        },
+        "error": {
+            "default": "Đã xảy ra lỗi",
+            "failed": "Xử lý yêu cầu thất bại"
+        }
+    },
+    "ApiTab": {
+        "title": "Cách gọi API này",
+        "subtitle": "Dùng request bên dưới từ script, CLI hoặc ứng dụng khác.",
+        "endpoint": "Endpoint",
+        "body": "Request body",
+        "bodyHint": "Chạy thử experiment một lần để dùng request vừa gửi làm mẫu.",
+        "response": "Response",
+        "responseDesc": "Trả về JSON: { success, data?, error?, executionId, metadata: { latency, totalTokens, costEstimate, cached, model } }.",
+        "copyCurl": "Sao chép dạng cURL",
+        "copyFetch": "Sao chép dạng fetch",
+        "copied": "Đã sao chép vào clipboard",
+        "copyFailed": "Sao chép thất bại"
+    },
+    "EmptyStates": {
+        "analytics": {
+            "title": "Chưa có số liệu",
+            "subtitle": "Chạy thử experiment ở tab Chạy để xem độ trễ, chi phí và thống kê cache tại đây."
+        },
+        "iterations": {
+            "title": "Chưa có phiên bản prompt",
+            "subtitle": "Tạo phiên bản prompt mới để theo dõi thay đổi theo thời gian."
+        },
+        "learnings": {
+            "title": "Chưa có ghi chú học được",
+            "subtitle": "Ghi lại những gì bạn học được từ mỗi lần chạy để xây dựng cơ sở kiến thức."
+        },
+        "learningsPublic": {
+            "title": "Chưa có ghi chú công khai",
+            "subtitle": "Ghi chú của nhóm sẽ hiển thị tại đây khi được chia sẻ."
+        }
+    },
+    "FeedbackPanel": {
+        "rateLabel": "Đánh giá kết quả này",
+        "commentLabel": "Phản hồi thêm (tùy chọn)",
+        "commentPlaceholder": "Điều gì có thể cải thiện?",
+        "submit": "Gửi phản hồi",
+        "submitting": "Đang gửi...",
+        "thankYou": "Cảm ơn bạn đã phản hồi!",
+        "selectRating": "Vui lòng chọn mức đánh giá",
+        "submitError": "Gửi phản hồi thất bại"
+    },
+    "ExperimentForm": {
+        "draft": {
+            "restored": "Đã khôi phục bản nháp từ {age}",
+            "clear": "Xóa"
+        },
+        "buttons": {
+            "analyze": "Phân tích",
+            "processing": "Đang xử lý..."
+        },
+        "shortcuts": {
+            "submit": "để gửi",
+            "close": "để đóng"
+        },
+        "vietnamese-text": {
+            "textLabel": "Văn bản tiếng Việt",
+            "textPlaceholder": "Nhập văn bản tiếng Việt để phân tích...",
+            "textHelp": "Cung cấp văn bản tiếng Việt để phân tích cảm xúc, phát hiện giọng điệu và hơn thế nữa.",
+            "instructions": "Cách sử dụng: Dán bất kỳ văn bản tiếng Việt nào vào ô bên dưới. AI sẽ phân tích cảm xúc, giọng điệu và trích xuất các cụm từ chính, đồng thời cung cấp bản tóm tắt toàn diện."
+        },
+        "code-insight": {
+            "languageLabel": "Ngôn ngữ lập trình",
+            "codeLabel": "Mã nguồn để phân tích",
+            "codePlaceholder": "Dán mã nguồn của bạn vào đây...",
+            "codeHelp": "Gửi mã nguồn để phân tích độ phức tạp, đánh giá kiến trúc và đề xuất tối ưu hóa hiệu suất.",
+            "instructions": "Cách sử dụng: Chọn ngôn ngữ lập trình, dán đoạn mã của bạn và nhấp vào Phân tích. AI sẽ xem xét các mẫu, độ phức tạp và các cải tiến tiềm năng."
+        },
+        "sql-generator": {
+            "dialectLabel": "Loại SQL",
+            "complexityLabel": "Độ phức tạp",
+            "descriptionLabel": "Mô tả truy vấn",
+            "descriptionPlaceholder": "Mô tả truy vấn bạn cần bằng ngôn ngữ tự nhiên...\nVí dụ: Lấy tất cả người dùng đã đăng ký trong 30 ngày qua và có ít nhất 3 đơn hàng",
+            "descriptionHelp": "Mô tả dữ liệu bạn cần, bất kỳ điều kiện, sắp xếp hoặc nhóm nào.",
+            "schemaLabel": "Schema cơ sở dữ liệu (Tùy chọn)",
+            "schemaPlaceholder": "Dán schema bảng của bạn vào đây...\nVí dụ:\nusers (id INTEGER, name VARCHAR, email VARCHAR, created_at TIMESTAMP)\norders (id INTEGER, user_id INTEGER, total DECIMAL, created_at TIMESTAMP)",
+            "schemaHelp": "Cung cấp định nghĩa bảng để nhận truy vấn chính xác hơn bằng tên cột thực tế của bạn.",
+            "instructions": "Cách sử dụng: Mô tả truy vấn bạn cần bằng ngôn ngữ tự nhiên. Tùy chọn, hãy cung cấp sơ đồ cơ sở dữ liệu (bảng/cột) của bạn để giúp AI tạo SQL chính xác hơn.",
+            "options": {
+                "generic": "Generic SQL",
+                "simple": "Đơn giản",
+                "medium": "Trung bình",
+                "complex": "Phức tạp"
+            }
+        },
+        "data-extractor": {
+            "textLabel": "Văn bản nguồn",
+            "textPlaceholder": "Dán văn bản không cấu trúc vào đây...",
+            "schemaDescriptionLabel": "Yêu cầu trích xuất",
+            "schemaDescriptionPlaceholder": "Ví dụ: Trích xuất tên người, ngày sinh và địa chỉ...",
+            "textHelp": "Văn bản bạn muốn chuyển đổi sang JSON có cấu trúc.",
+            "schemaDescriptionHelp": "Mô tả các thực thể bạn muốn AI tìm kiếm.",
+            "instructions": "Cách sử dụng: Dán một đoạn văn bản thô (email, bài báo, v.v.) vào ô 'Văn bản nguồn', sau đó mô tả những gì bạn muốn trích xuất vào ô 'Yêu cầu trích xuất'. AI sẽ trả về dữ liệu dưới dạng JSON sạch."
+        },
+        "model-arena": {
+            "promptRequestedLabel": "Prompt thử nghiệm",
+            "promptRequestedPlaceholder": "Nhập prompt bạn muốn so sánh giữa các model...",
+            "modelsToCompareLabel": "Các model so sánh",
+            "promptRequestedHelp": "Prompt này sẽ được gửi tới nhiều model để so sánh kết quả.",
+            "instructions": "Cách sử dụng: Nhập một 'Test Prompt' mà bạn muốn thử nghiệm. Chọn ít nhất 2 model để so sánh. Bạn sẽ thấy phản hồi side-by-side cùng với phân tích điểm mạnh/yếu của mỗi model."
+        },
+        "intent-classifier": {
+            "userInputLabel": "Lệnh người dùng",
+            "userInputPlaceholder": "Ví dụ: Đặt vé máy bay đi Hà Nội vào ngày mai...",
+            "contextLabel": "Ngữ cảnh",
+            "userInputHelp": "Nhập câu lệnh tự nhiên để AI phân loại ý định.",
+            "instructions": "Cách sử dụng: Nhập một câu lệnh bất kỳ của người dùng. AI sẽ phân loại ý định (intent), mức độ ưu tiên và trích xuất các tham số cần thiết để thực hiện hành động đó."
+        },
+        "robustness-tester": {
+            "basePromptLabel": "Prompt gốc",
+            "basePromptPlaceholder": "Nhập prompt muốn kiểm tra độ bền...",
+            "perturbationTypeLabel": "Loại nhiễu",
+            "options": {
+                "typos": "Lỗi đánh máy",
+                "slang": "Từ lóng",
+                "adversarial": "Đối nghịch",
+                "none": "Không có"
+            },
+            "instructions": "Cách sử dụng: Nhập một prompt tiêu chuẩn. Chọn loại 'nhiễu' (ví dụ: Lỗi đánh máy). AI sẽ tự động biến đổi prompt của bạn và kiểm tra xem model có còn phản hồi chính xác hay không."
+        },
+        "cot-reasoning": {
+            "problemLabel": "Vấn đề cần giải quyết",
+            "problemPlaceholder": "Nhập bài toán logic hoặc vấn đề phức tạp...",
+            "complexityLabel": "Độ phức tạp",
+            "options": {
+                "low": "Thấp",
+                "medium": "Trung bình",
+                "high": "Cao"
+            },
+            "instructions": "Cách sử dụng: Nhập một bài toán logic hoặc vấn đề cần giải quyết phức tạp. AI sẽ hiển thị rõ ràng từng bước suy luận (thought process) trước khi đưa ra câu trả lời cuối cùng."
+        },
+        "costEstimator": {
+            "title": "Chi phí ước tính",
+            "tooltip": "Ước tính dựa trên độ dài đầu vào + đầu ra tối đa. Giới hạn ngày: ${limit}",
+            "tokens": "{count} tokens used by input",
+            "overLimit": "Estimated cost exceeds daily budget limit",
+            "errorCalculation": "Không thể ước tính chi phí"
+        },
+        "modelSelector": {
+            "label": "Mô hình AI",
+            "placeholder": "Chọn mô hình...",
+            "help": "Các mô hình khác nhau có khả năng và chi phí khác nhau."
+        }
+    },
+    "ResultDisplay": {
+        "actions": {
+            "copyResult": "Sao chép kết quả",
+            "copied": "Đã sao chép!",
+            "exportJson": "Xuất JSON",
+            "shareLink": "Chia sẻ liên kết",
+            "qrCode": "Mã QR",
+            "favorite": "Yêu thích",
+            "favorited": "Đã yêu thích",
+            "save": "Lưu",
+            "cancel": "Hủy",
+            "close": "Đóng",
+            "scanToOpen": "Quét để mở",
+            "scanInstruction": "Quét mã QR này bằng camera điện thoại của bạn để xem kết quả trên di động",
+            "copyLink": "Sao chép liên kết",
+            "copyCode": "Sao chép",
+            "enterTitle": "Nhập tiêu đề cho mục yêu thích này..."
+        },
+        "metadata": {
+            "latency": "Độ trễ",
+            "tokens": "Tokens",
+            "cost": "Chi phí",
+            "cache": "Cache",
+            "hit": "Hit",
+            "miss": "Miss"
+        },
+        "toast": {
+            "copied": "Đã sao chép vào clipboard",
+            "linkCopied": "Đã sao chép liên kết chia sẻ"
+        },
+        "error": {
+            "retry": "Thử lại",
+            "retryIn": "Thử lại sau {seconds}s",
+            "rate_limit": {
+                "title": "Quá nhiều yêu cầu",
+                "suggestion": "Đợi một chút rồi thử lại. Giới hạn 5 yêu cầu/phút theo IP."
+            },
+            "budget": {
+                "title": "Đã hết ngân sách trong ngày",
+                "suggestion": "Đã đạt giới hạn chi tiêu trong ngày. Thử lại vào ngày mai hoặc điều chỉnh trong cấu hình server."
+            },
+            "validation": {
+                "title": "Dữ liệu không hợp lệ",
+                "suggestion": "Kiểm tra các trường trong form và sửa lỗi bên dưới."
+            },
+            "api_key": {
+                "title": "Cấu hình API",
+                "suggestion": "Thêm API key trong Cài đặt (biểu tượng bánh răng) hoặc dùng key của bạn (BYOK)."
+            },
+            "server": {
+                "title": "Đã xảy ra lỗi",
+                "suggestion": "Thử lại sau hoặc kiểm tra kết nối."
+            }
+        },
+        "sections": {
+            "error": "Lỗi thực thi",
+            "results": "Kết quả phân tích",
+            "keyPhrases": "Cụm từ khóa",
+            "generatedSql": "Truy vấn SQL được tạo",
+            "explanation": "Giải thích",
+            "parameters": "Tham số truy vấn",
+            "warnings": "Cảnh báo & Lưu ý",
+            "alternatives": "Phương án thay thế"
+        },
+        "fields": {
+            "sentiment": "Cảm xúc",
+            "tone": "Giọng điệu",
+            "summary": "Tóm tắt",
+            "rewrite": "Viết lại",
+            "complexity": "Độ phức tạp",
+            "architecture": "Kiến trúc",
+            "refactorHints": "Gợi ý Refactor",
+            "antiPatterns": "Anti-patterns",
+            "performanceTips": "Mẹo hiệu suất"
+        }
+    },
+    "Experiments": {
+        "vietnamese-text": {
+            "name": "Phân tích văn bản tiếng Việt",
+            "description": "Phân tích cảm xúc và phát hiện giọng điệu cho tiếng Việt bằng AI"
+        },
+        "code-insight": {
+            "name": "Công cụ Code Insight",
+            "description": "Phân tích độ phức tạp mã nguồn và phát hiện mẫu kiến trúc tự động"
+        },
+        "sql-generator": {
+            "name": "SQL Generator",
+            "description": "Chuyển đổi ngôn ngữ tự nhiên sang truy vấn SQL với hỗ trợ đa phương ngữ"
+        },
+        "data-extractor": {
+            "name": "Trích xuất Dữ liệu Có cấu trúc",
+            "description": "Chuyển đổi văn bản tự do thành JSON có cấu trúc chặt chẽ bằng Zod."
+        },
+        "model-arena": {
+            "name": "Đấu trường Model",
+            "description": "So sánh side-by-side phản hồi, chi phí và độ trễ giữa nhiều AI model."
+        },
+        "intent-classifier": {
+            "name": "Phân loại Ý định Thông minh",
+            "description": "Chuyển lệnh ngôn ngữ tự nhiên thành ý định và tham số hành động."
+        },
+        "robustness-tester": {
+            "name": "Kiểm tra Độ bền Prompt",
+            "description": "Đánh giá cách AI xử lý nhiễu, lỗi đánh máy và biến thể đối nghịch."
+        },
+        "cot-reasoning": {
+            "name": "Suy luận Chain-of-Thought",
+            "description": "Trực quan hóa quá trình suy luận logic từng bước cho các bài toán phức tạp."
+        }
+    },
+    "UserGuide": {
+        "trigger": "Hướng dẫn sử dụng",
+        "home": {
+            "title": "Chào mừng đến với AI Lab",
+            "sections": {
+                "what": {
+                    "heading": "Đây là gì?",
+                    "content": "Đây là một sandbox dành cho lập trình viên để thử nghiệm các mẫu tích hợp AI ở cấp độ sản xuất. Mỗi thực nghiệm mô phỏng một kịch bản thực tế, đi kèm với ước tính chi phí, số liệu hiệu năng và chiến lược cache."
+                },
+                "quickStart": {
+                    "heading": "Bắt đầu nhanh",
+                    "content": "1. Chọn một thực nghiệm từ danh sách bên trái.\n2. Điều chỉnh cài đặt hoặc sử dụng đầu vào mặc định.\n3. Nhấn 'Phân tích' để xem AI hoạt động.\n4. Khám phá các tab 'Phân tích' và 'Lịch sử' để xem chi tiết kỹ thuật."
+                },
+                "whatYouGet": {
+                    "heading": "Bạn nhận được gì",
+                    "content": "Mọi yêu cầu đều được đo lường đầy đủ. Bạn nhận được kết quả, số lượng token, phân tích độ trễ và chi phí ước tính. Ngoài ra, chúng tôi còn hiển thị 'Quy trình tư duy' cho hầu hết các thực nghiệm."
+                },
+                "explained": {
+                    "heading": "Giải thích thực nghiệm",
+                    "content": "Chọn từ các công cụ như SQL Generator, Code Insight Engine hoặc Structured Data Extractor. Mỗi công cụ được xây dựng với một mẫu kiến trúc cụ thể (ví dụ: xác thực Zod, phiên bản Prompt)."
+                },
+                "tips": {
+                    "heading": "Mẹo chuyên nghiệp",
+                    "content": "• Sử dụng API key của riêng bạn trong Cài đặt để vượt qua giới hạn hàng ngày.\n• Kiểm tra trang 'Xem Kiến trúc' để xem hệ thống được xây dựng như thế nào.\n• Hầu hết các kết quả có thể được sao chép hoặc chia sẻ với người khác."
+                }
+            }
+        },
+        "experiments": {
+            "vietnamese-text": {
+                "title": "Hướng dẫn Phân tích Văn bản tiếng Việt",
+                "sections": {
+                    "what": {
+                        "heading": "Tính năng",
+                        "content": "Phân tích văn bản tiếng Việt để tìm cảm xúc (Tích cực/Tiêu cực/Trung tính), phát hiện giọng điệu và trích xuất các từ khóa quan trọng."
+                    },
+                    "how": {
+                        "heading": "Cách dùng",
+                        "content": "Dán bất kỳ văn bản tiếng Việt nào (bình luận, bài báo, v.v.). AI sử dụng prompt engineering đặc thù cho ngôn ngữ để hiểu các sắc thái và phương ngữ."
+                    },
+                    "examples": {
+                        "heading": "Thử nghiệm",
+                        "content": "• 'Dùng rất ổn, giá cả phải chăng.'\n• 'Chất lượng quá kém, không bao giờ quay lại!'"
+                    },
+                    "cost": {
+                        "heading": "Hiệu quả chi phí",
+                        "content": "Model này đã được tối ưu hóa. Chúng tôi khuyên dùng 'gpt-4o-mini' để phân tích khối lượng lớn nhằm tiết kiệm chi phí mà vẫn đảm bảo độ chính xác."
+                    }
+                }
+            },
+            "code-insight": {
+                "title": "Hướng dẫn Code Insight",
+                "sections": {
+                    "what": {
+                        "heading": "Tính năng",
+                        "content": "Phân tích sâu kiến trúc mã nguồn, phát hiện code smells và cung cấp các gợi ý refactor có thể thực hiện được."
+                    },
+                    "how": {
+                        "heading": "Cách dùng",
+                        "content": "Chọn ngôn ngữ và dán một đoạn hàm hoặc class. AI sẽ đánh giá độ phức tạp và đề xuất cải thiện mẫu thiết kế."
+                    },
+                    "bestPractices": {
+                        "heading": "Thực hành tốt",
+                        "content": "Gửi các đơn vị logic (như một class đơn lẻ hoặc hàm phức tạp) thay vì file thô để có độ chính xác tốt nhất."
+                    },
+                    "cost": {
+                        "heading": "Mẹo ngữ cảnh",
+                        "content": "Các file lớn sẽ tiêu tốn nhiều token hơn. Sử dụng 'Claude 3.5 Sonnet' cho logic kiến trúc phức tạp vì nó có cửa sổ ngữ cảnh lớn hơn."
+                    }
+                }
+            },
+            "sql-generator": {
+                "title": "Hướng dẫn SQL Generator",
+                "sections": {
+                    "what": {
+                        "heading": "Tính năng",
+                        "content": "Chuyển đổi mô tả ngôn ngữ tự nhiên thành các truy vấn SQL hợp lệ và đặc thù cho từng loại database."
+                    },
+                    "how": {
+                        "heading": "Cách dùng",
+                        "content": "Mô tả mục tiêu của bạn (ví dụ: 'Lấy 5 khách hàng hàng đầu'). Thêm schema của bạn (định nghĩa bảng) sẽ làm cho kết quả chính xác hơn đáng kể."
+                    },
+                    "examples": {
+                        "heading": "Ví dụ",
+                        "content": "• 'Tìm người dùng đã đăng ký tuần trước'\n• 'Tính doanh thu trung bình mỗi tháng theo từng danh mục'"
+                    },
+                    "schema": {
+                        "heading": "Sức mạnh Schema",
+                        "content": "Nếu bạn cung cấp tên bảng và cột, AI sẽ sử dụng cấu trúc thực tế của bạn thay vì tự đoán."
+                    }
+                }
+            },
+            "data-extractor": {
+                "title": "Hướng dẫn Trích xuất Dữ liệu Có cấu trúc",
+                "sections": {
+                    "what": {
+                        "heading": "Tính năng",
+                        "content": "Chuyển đổi văn bản hỗn độn thành dữ liệu JSON sạch dựa trên yêu cầu của bạn."
+                    },
+                    "how": {
+                        "heading": "Cơ chế",
+                        "content": "Chúng tôi sử dụng mẫu 'Strict Output'. Điều này đảm bảo kết quả khớp hoàn hảo với schema JSON của bạn, nếu không sẽ trả về lỗi."
+                    },
+                    "bestPractices": {
+                        "heading": "Thực hành tốt",
+                        "content": "Hãy cụ thể trong 'Yêu cầu trích xuất'. Đề cập đến định dạng dữ liệu (ví dụ: 'trích xuất ngày dưới dạng chuỗi ISO')."
+                    }
+                }
+            },
+            "model-arena": {
+                "title": "Hướng dẫn Đấu trường Model",
+                "sections": {
+                    "what": {
+                        "heading": "Tính năng",
+                        "content": "Chạy cùng một prompt trên nhiều model khác nhau để so sánh độ trễ, chi phí và chất lượng."
+                    },
+                    "how": {
+                        "heading": "Tại sao nên dùng?",
+                        "content": "Lý tưởng cho việc đo lường trong quá trình phát triển. Bạn có thể thấy model nào cho kết quả tốt nhất trước khi quyết định sử dụng chính thức."
+                    },
+                    "useCases": {
+                        "heading": "Trường hợp dùng",
+                        "content": "So sánh GPT-4o vs Claude 3.5 vs Llama 3 để tìm ra điểm cân bằng giữa trí thông minh và giá cả."
+                    }
+                }
+            },
+            "intent-classifier": {
+                "title": "Hướng dẫn Phân loại Ý định",
+                "sections": {
+                    "what": {
+                        "heading": "Tính năng",
+                        "content": "Xác định 'Ý định' đằng sau câu lệnh của người dùng và trích xuất các tham số hành động cần thiết."
+                    },
+                    "how": {
+                        "heading": "Cách dùng",
+                        "content": "Hoàn hảo để xây dựng chatbot hoặc trợ lý ảo. Nó ánh xạ ngôn ngữ tự nhiên (ví dụ: 'Đặt xe') sang một hành động kỹ thuật (ví dụ: 'BOOK_VEHICLE')."
+                    }
+                }
+            },
+            "robustness-tester": {
+                "title": "Hướng dẫn Kiểm tra Độ bền",
+                "sections": {
+                    "what": {
+                        "heading": "Tính năng",
+                        "content": "Kiểm tra xem prompt của bạn có 'chống đạn' không bằng cách tiêm nhiễu, lỗi đánh máy và các biến thể đối nghịch."
+                    },
+                    "how": {
+                        "heading": "Tại sao quan trọng?",
+                        "content": "Trong thực tế, người dùng không phải lúc nào cũng nhập chuẩn. Công cụ này giúp bạn đảm bảo AI vẫn tin cậy ngay cả với đầu vào không sạch."
+                    }
+                }
+            },
+            "cot-reasoning": {
+                "title": "Hướng dẫn Suy luận Chain-of-Thought",
+                "sections": {
+                    "what": {
+                        "heading": "Tính năng",
+                        "content": "Buộc AI phải 'suy nghĩ thành tiếng' từng bước trước khi đưa ra câu trả lời cuối cùng."
+                    },
+                    "how": {
+                        "heading": "Tại sao nên dùng?",
+                        "content": "Cải thiện độ chính xác cho các bài toán logic, toán học và ra quyết định phức tạp. Nó làm cho lập luận của AI trở nên minh bạch với bạn."
+                    }
+                }
+            }
+        },
+        "footer": {
+            "tip": "Mẹo: Bạn có thể sử dụng các mẫu này trong ứng dụng của chính mình!",
+            "close": "Đã hiểu"
+        }
+    }
+}
