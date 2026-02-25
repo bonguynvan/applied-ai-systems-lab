@@ -11,6 +11,9 @@ import { copyShareLink, generateShareUrl, type ShareableData } from '@/lib/share
 import { addToFavorites, isFavorited, removeFromFavorites } from '@/lib/favorites';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts';
+import { power655AllTimeFrequency } from '@/lib/lottery/vietlott-history';
 
 interface ResultDisplayProps {
   result: ExecutionResult | null;
@@ -692,6 +695,114 @@ export const ResultDisplay = memo(function ResultDisplay({
                 </div>
               </div>
             )}
+          </div>
+        )}
+
+        {experimentSlug === 'lottery-probability-lab' && result.data && (
+          <div className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <MetadataCard
+                label={t('lottery.gameName')}
+                value={result.data.gameName}
+              />
+              <MetadataCard
+                label={t('lottery.totalCombinations')}
+                value={result.data.totalCombinations.toLocaleString()}
+              />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <MetadataCard
+                label={t('lottery.jackpotOdds')}
+                value={
+                  result.data.jackpotOddsOneIn > 0
+                    ? `1 : ${Math.round(
+                        result.data.jackpotOddsOneIn
+                      ).toLocaleString()}`
+                    : '—'
+                }
+              />
+              <MetadataCard
+                label={t('lottery.probabilityAtLeastOne')}
+                value={`${(result.data.probabilityAtLeastOneJackpot * 100).toFixed(6)}%`}
+              />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <MetadataCard
+                label={t('lottery.evPerTicket')}
+                value={result.data.expectedValuePerTicket.toFixed(2)}
+              />
+              <MetadataCard
+                label={t('lottery.totalTickets')}
+                value={result.data.totalTickets.toLocaleString()}
+              />
+              <MetadataCard
+                label={t('lottery.expectedTotalSpend')}
+                value={result.data.expectedTotalSpend.toLocaleString()}
+              />
+            </div>
+
+            <ResultTextField
+              label={t('lottery.explanation')}
+              value={result.data.aiNarrative || result.data.explanation}
+            />
+
+            {/* Historical frequency chart (Power 6/55) */}
+            {result.data.gameName.includes('6/55') && (
+              <div className="space-y-3">
+                <div className="flex flex-col gap-1">
+                  <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+                    {t('lottery.historyTitle')}
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    {t('lottery.historySubtitle')}
+                  </p>
+                </div>
+                <ChartContainer
+                  config={{
+                    count: {
+                      label: t('lottery.historySeriesLabel'),
+                      color: 'hsl(222.2 84% 56.5%)',
+                    },
+                  }}
+                  className="w-full"
+                >
+                  <BarChart data={power655AllTimeFrequency}>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                    <XAxis
+                      dataKey="number"
+                      tickLine={false}
+                      axisLine={false}
+                      tickMargin={8}
+                      fontSize={10}
+                    />
+                    <YAxis
+                      tickLine={false}
+                      axisLine={false}
+                      tickMargin={4}
+                      fontSize={10}
+                      allowDecimals={false}
+                    />
+                    <ChartTooltip content={<ChartTooltipContent nameKey="count" />} />
+                    <Bar
+                      dataKey="count"
+                      fill="var(--color-count)"
+                      radius={[2, 2, 0, 0]}
+                    />
+                  </BarChart>
+                </ChartContainer>
+              </div>
+            )}
+
+            <div className="border border-yellow-500/40 bg-yellow-500/10 rounded-lg p-4">
+              <div className="text-xs font-semibold text-yellow-600 uppercase tracking-wide mb-2">
+                {t('lottery.disclaimerTitle')}
+              </div>
+              <p className="text-xs md:text-sm text-yellow-700">
+                {t('lottery.disclaimerBody')}
+              </p>
+            </div>
           </div>
         )}
       </div>

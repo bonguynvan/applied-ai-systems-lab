@@ -6,6 +6,7 @@ import { modelArenaExperiment } from '@/server/experiments/model-arena';
 import { intentClassifierExperiment } from '@/server/experiments/intent-classifier';
 import { robustnessTesterExperiment } from '@/server/experiments/robustness-tester';
 import { cotReasoningExperiment } from '@/server/experiments/cot-reasoning';
+import { lotteryProbabilityLabExperiment } from '@/server/experiments/lottery-probability-lab';
 import { ExperimentModule } from '@/types/experiments';
 
 export const EXPERIMENTS_REGISTRY: Record<string, ExperimentModule> = {
@@ -17,6 +18,7 @@ export const EXPERIMENTS_REGISTRY: Record<string, ExperimentModule> = {
   [intentClassifierExperiment.metadata.slug]: intentClassifierExperiment,
   [robustnessTesterExperiment.metadata.slug]: robustnessTesterExperiment,
   [cotReasoningExperiment.metadata.slug]: cotReasoningExperiment,
+  [lotteryProbabilityLabExperiment.metadata.slug]: lotteryProbabilityLabExperiment,
 };
 
 export function getExperimentBySlug(slug: string): ExperimentModule | null {

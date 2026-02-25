@@ -1,7 +1,7 @@
 {
     "HomePage": {
-        "title": "Applied AI Playground",
-        "description": "A developer's sandbox for exploring practical AI integration patterns. Featuring cost tracking, observability, and smart caching.",
+        "title": "Applied AI Systems Lab",
+        "description": "Open-source AI playground for developers, showcasing production-grade patterns for safe, cost-aware multi-model orchestration, observability, and experiments like Model Arena and Lottery Probability Lab.",
         "availableDemos": "Available Demos"
     },
     "Navigation": {
@@ -440,7 +440,7 @@
         "body": "Request body",
         "bodyHint": "Run the experiment once to use your last request as the example.",
         "response": "Response",
-        "responseDesc": "Returns JSON: { success, data?, error?, executionId, metadata: { latency, totalTokens, costEstimate, cached, model } }.",
+        "responseDesc": "Returns a JSON object with fields: success, optional data, optional error, executionId and metadata (latency, totalTokens, costEstimate, cached, model).",
         "copyCurl": "Copy as cURL",
         "copyFetch": "Copy as fetch",
         "copied": "Copied to clipboard",
@@ -517,6 +517,24 @@
                 "complex": "Complex"
             }
         },
+        "lottery-probability-lab": {
+            "gameTypeLabel": "Lottery game",
+            "gameTypeCustom": "Custom game",
+            "poolSizeLabel": "Number pool size (n)",
+            "poolSizeHelp": "Total numbers to choose from. For Vietlott Power 6/55, n = 55.",
+            "pickCountLabel": "Numbers per ticket (k)",
+            "pickCountHelp": "How many numbers you pick on each ticket.",
+            "ticketPriceLabel": "Ticket price (VND)",
+            "ticketPriceHelp": "Face value of a single ticket in Vietnamese Dong.",
+            "jackpotLabel": "Jackpot value (VND, approximate)",
+            "jackpotHelp": "Estimated jackpot size. Use a rough average if it varies over time.",
+            "drawsLabel": "Number of draws",
+            "drawsHelp": "How many lottery drawings you hypothetically participate in (e.g. 104 draws ≈ 2 years at 2 draws/week).",
+            "ticketsPerDrawLabel": "Tickets per draw",
+            "ticketsPerDrawHelp": "How many tickets you buy each time there is a draw.",
+            "instructions": "How to use: Configure the lottery game (e.g. Vietlott Power 6/55), ticket price, jackpot size, and how many tickets you hypothetically buy over time. This tool computes exact odds and expected value to show how unlikely jackpots are and why lottery is mathematically negative-EV. It does not encourage real-world gambling.",
+            "options": {}
+        },
         "data-extractor": {
             "textLabel": "Source Text",
             "textPlaceholder": "Paste unstructured text here...",
@@ -568,7 +586,9 @@
             "tooltip": "Estimates cost based on input length + potential max output. Daily limit: ${limit}",
             "tokens": "~{count} input tokens",
             "overLimit": "Exceeds limit! Shorten input or switch model.",
-            "errorCalculation": "Cost estimation unavailable"
+            "errorCalculation": "Cost estimation unavailable",
+            "sharedBudgetNote": "Using the lab's shared budget: each request is capped at about ${perRequest} and there is a global daily limit of ${daily}.",
+            "byokNote": "You are using your own API key (BYOK). The lab's shared budget limits (${daily}/day and about ${perRequest} per request) do not apply; charges are billed directly to your own provider account."
         },
         "modelSelector": {
             "label": "AI Model",
@@ -576,7 +596,7 @@
             "help": "Different models have different capabilities and costs."
         }
     },
-    "ResultDisplay": {
+        "ResultDisplay": {
         "actions": {
             "copyResult": "Copy Result",
             "copied": "Copied!",
@@ -650,6 +670,21 @@
             "refactorHints": "Refactor Hints",
             "antiPatterns": "Anti-patterns",
             "performanceTips": "Performance Tips"
+        },
+        "lottery": {
+            "gameName": "Lottery Game",
+            "totalCombinations": "Total combinations (C(n, k))",
+            "jackpotOdds": "Jackpot odds per ticket",
+            "probabilityAtLeastOne": "P(≥1 jackpot over all tickets)",
+            "evPerTicket": "Expected value per ticket (VND)",
+            "totalTickets": "Total tickets in scenario",
+            "expectedTotalSpend": "Expected total spend (VND)",
+            "explanation": "Explanation",
+            "disclaimerTitle": "Legal & responsible play disclaimer",
+            "disclaimerBody": "This tool is for educational and research purposes only. It uses basic probability theory to illustrate how unlikely lottery jackpots are and why the expected value is negative in most real-world games. It does not provide gambling advice, does not guarantee any outcome, and should not be used to make financial or betting decisions. Always comply with local laws and only participate in lottery games, if you choose to, in a legal and responsible way using money you can afford to lose.",
+            "historyTitle": "Historical number frequency (Power 6/55)",
+            "historySubtitle": "Counts of how often each number 1–55 has been drawn historically. In a fair lottery this distribution should be roughly flat; past frequency does not increase the true probability of a number in future draws.",
+            "historySeriesLabel": "Draw count"
         }
     },
     "Experiments": {
@@ -684,6 +719,10 @@
         "cot-reasoning": {
             "name": "Chain-of-Thought Reasoning",
             "description": "Visualize the multi-step logical reasoning process for complex problem solving."
+        },
+        "lottery-probability-lab": {
+            "name": "Lottery Probability Lab",
+            "description": "Explore lottery odds, expected value, and long-term scenarios using exact probability—not lucky numbers."
         }
     },
     "UserGuide": {
@@ -847,6 +886,23 @@
                     "how": {
                         "heading": "Why use it?",
                         "content": "Improves accuracy for logic puzzles, math, and complex decision making. It makes the AI's reasoning fully transparent to you."
+                    }
+                }
+            },
+            "lottery-probability-lab": {
+                "title": "Lottery Probability Lab Guide",
+                "sections": {
+                    "what": {
+                        "heading": "What it does",
+                        "content": "Uses exact combinatorics (C(n, k)) and basic probability to quantify how unlikely lottery jackpots are, and to compute the expected value of different play scenarios."
+                    },
+                    "how": {
+                        "heading": "How to use",
+                        "content": "Pick a lottery type (e.g. Vietlott Power 6/55), set ticket price, jackpot size and how many tickets you hypothetically buy over time. The tool shows jackpot odds, expected value per ticket and the probability of hitting at least one jackpot over all draws."
+                    },
+                    "bestPractices": {
+                        "heading": "Important disclaimer",
+                        "content": "All valid combinations in a fair lottery have exactly the same probability. This lab does not generate 'better' or 'luckier' numbers, and it is not gambling advice. It is meant to build intuition about risk and expected value so that people understand lottery as paid entertainment, not an investment."
                     }
                 }
             }

@@ -1,7 +1,7 @@
 {
     "HomePage": {
-        "title": "Sân chơi AI Ứng dụng",
-        "description": "Nơi các lập trình viên khám phá các mẫu tích hợp AI thực tế. Bao gồm theo dõi chi phí, khả năng quan sát và cache thông minh.",
+        "title": "Applied AI Systems Lab",
+        "description": "Sân chơi AI mã nguồn mở cho lập trình viên, tập trung vào các mẫu tích hợp AI mức production: kiểm soát chi phí, quan sát hệ thống, điều phối đa mô hình an toàn và các thực nghiệm như Model Arena, Lottery Probability Lab.",
         "availableDemos": "Các Demo có sẵn"
     },
     "Navigation": {
@@ -440,7 +440,7 @@
         "body": "Request body",
         "bodyHint": "Chạy thử experiment một lần để dùng request vừa gửi làm mẫu.",
         "response": "Response",
-        "responseDesc": "Trả về JSON: { success, data?, error?, executionId, metadata: { latency, totalTokens, costEstimate, cached, model } }.",
+        "responseDesc": "Trả về một đối tượng JSON với các trường: success, data (tùy chọn), error (tùy chọn), executionId và metadata (latency, totalTokens, costEstimate, cached, model).",
         "copyCurl": "Sao chép dạng cURL",
         "copyFetch": "Sao chép dạng fetch",
         "copied": "Đã sao chép vào clipboard",
@@ -517,6 +517,24 @@
                 "complex": "Phức tạp"
             }
         },
+        "lottery-probability-lab": {
+            "gameTypeLabel": "Loại xổ số",
+            "gameTypeCustom": "Tùy chỉnh",
+            "poolSizeLabel": "Kích thước tập số (n)",
+            "poolSizeHelp": "Tổng số con số có thể chọn. Ví dụ Vietlott Power 6/55 thì n = 55.",
+            "pickCountLabel": "Số con trên 1 vé (k)",
+            "pickCountHelp": "Số con số bạn chọn trên mỗi vé.",
+            "ticketPriceLabel": "Giá 1 vé (VND)",
+            "ticketPriceHelp": "Mệnh giá 1 vé theo Việt Nam Đồng.",
+            "jackpotLabel": "Giá trị jackpot (VND, ước lượng)",
+            "jackpotHelp": "Giá trị jackpot ước tính. Có thể dùng mức trung bình nếu jackpot thay đổi theo thời gian.",
+            "drawsLabel": "Số kỳ quay",
+            "drawsHelp": "Số lần quay mà bạn giả định tham gia (ví dụ 104 kỳ ≈ 2 năm nếu 2 kỳ/tuần).",
+            "ticketsPerDrawLabel": "Số vé mỗi kỳ",
+            "ticketsPerDrawHelp": "Số vé bạn mua trong mỗi kỳ quay.",
+            "instructions": "Cách sử dụng: Cấu hình trò chơi xổ số (ví dụ Vietlott Power 6/55), giá vé, giá trị jackpot và số vé bạn giả định mua theo thời gian. Công cụ sẽ tính toán chính xác xác suất và giá trị kỳ vọng để cho thấy việc trúng jackpot khó như thế nào và vì sao xổ số là trò chơi có kỳ vọng âm. Công cụ không khuyến khích hay tư vấn cá cược thực tế.",
+            "options": {}
+        },
         "data-extractor": {
             "textLabel": "Văn bản nguồn",
             "textPlaceholder": "Dán văn bản không cấu trúc vào đây...",
@@ -568,7 +586,9 @@
             "tooltip": "Ước tính dựa trên độ dài đầu vào + đầu ra tối đa. Giới hạn ngày: ${limit}",
             "tokens": "{count} tokens used by input",
             "overLimit": "Estimated cost exceeds daily budget limit",
-            "errorCalculation": "Không thể ước tính chi phí"
+            "errorCalculation": "Không thể ước tính chi phí",
+            "sharedBudgetNote": "Đang dùng ngân sách chung của phòng lab: mỗi request được giới hạn khoảng ${perRequest} và tổng chi cho cả hệ thống tối đa ${daily} mỗi ngày.",
+            "byokNote": "Bạn đang dùng API key của riêng mình (BYOK). Giới hạn ngân sách chung của hệ thống (${daily}/ngày, khoảng ${perRequest}/request) không còn áp dụng; chi phí được tính trực tiếp vào tài khoản nhà cung cấp của bạn."
         },
         "modelSelector": {
             "label": "Mô hình AI",
@@ -576,7 +596,7 @@
             "help": "Các mô hình khác nhau có khả năng và chi phí khác nhau."
         }
     },
-    "ResultDisplay": {
+        "ResultDisplay": {
         "actions": {
             "copyResult": "Sao chép kết quả",
             "copied": "Đã sao chép!",
@@ -650,6 +670,21 @@
             "refactorHints": "Gợi ý Refactor",
             "antiPatterns": "Anti-patterns",
             "performanceTips": "Mẹo hiệu suất"
+        },
+        "lottery": {
+            "gameName": "Trò chơi xổ số",
+            "totalCombinations": "Tổng số tổ hợp (C(n, k))",
+            "jackpotOdds": "Xác suất trúng jackpot mỗi vé",
+            "probabilityAtLeastOne": "P(≥1 lần trúng jackpot trong toàn bộ kịch bản)",
+            "evPerTicket": "Giá trị kỳ vọng mỗi vé (VND)",
+            "totalTickets": "Tổng số vé trong kịch bản",
+            "expectedTotalSpend": "Tổng tiền dự kiến bỏ ra (VND)",
+            "explanation": "Giải thích",
+            "disclaimerTitle": "Khuyến cáo pháp lý & chơi có trách nhiệm",
+            "disclaimerBody": "Công cụ này chỉ dùng cho mục đích giáo dục và nghiên cứu. Nó sử dụng lý thuyết xác suất cơ bản để minh họa việc trúng jackpot khó như thế nào và vì sao xổ số thường có giá trị kỳ vọng âm. Công cụ không cung cấp lời khuyên cờ bạc, không đảm bảo bất kỳ kết quả nào và không nên được dùng để ra quyết định tài chính hay đặt cược. Luôn tuân thủ pháp luật tại nơi bạn sinh sống và nếu tham gia xổ số, hãy coi đó là hình thức giải trí, chỉ dùng số tiền bạn có thể chấp nhận mất.",
+            "historyTitle": "Tần suất xuất hiện số (Power 6/55)",
+            "historySubtitle": "Số lần mỗi con số 1–55 đã được quay trong lịch sử. Trong một hệ thống xổ số công bằng, phân bố này sẽ xấp xỉ phẳng; tần suất quá khứ không làm tăng xác suất thực sự của một con số trong các kỳ quay tương lai.",
+            "historySeriesLabel": "Số lần xuất hiện"
         }
     },
     "Experiments": {
@@ -684,6 +719,10 @@
         "cot-reasoning": {
             "name": "Suy luận Chain-of-Thought",
             "description": "Trực quan hóa quá trình suy luận logic từng bước cho các bài toán phức tạp."
+        },
+        "lottery-probability-lab": {
+            "name": "Lottery Probability Lab",
+            "description": "Khám phá odds trúng số, giá trị kỳ vọng và các kịch bản dài hạn dựa trên xác suất chính xác – không phải \"con số may mắn\"."
         }
     },
     "UserGuide": {
@@ -847,6 +886,23 @@
                     "how": {
                         "heading": "Tại sao nên dùng?",
                         "content": "Cải thiện độ chính xác cho các bài toán logic, toán học và ra quyết định phức tạp. Nó làm cho lập luận của AI trở nên minh bạch với bạn."
+                    }
+                }
+            },
+            "lottery-probability-lab": {
+                "title": "Hướng dẫn Lottery Probability Lab",
+                "sections": {
+                    "what": {
+                        "heading": "Tính năng",
+                        "content": "Sử dụng tổ hợp chính xác (C(n, k)) và xác suất cơ bản để định lượng mức độ khó trúng jackpot và tính giá trị kỳ vọng cho các kịch bản chơi khác nhau."
+                    },
+                    "how": {
+                        "heading": "Cách dùng",
+                        "content": "Chọn loại xổ số (ví dụ Vietlott Power 6/55), thiết lập giá vé, giá trị jackpot và số vé bạn giả định mua theo thời gian. Công cụ hiển thị xác suất trúng jackpot, EV mỗi vé và xác suất có ít nhất 1 lần trúng jackpot trong toàn bộ kịch bản."
+                    },
+                    "bestPractices": {
+                        "heading": "Lưu ý quan trọng",
+                        "content": "Trong một hệ thống xổ số công bằng, mọi bộ số hợp lệ đều có xác suất như nhau. Lab này không sinh ra 'bộ số may mắn' hay 'bộ số xác suất cao' và không phải là lời khuyên cờ bạc. Mục tiêu là giúp bạn hiểu rủi ro và giá trị kỳ vọng, để xem xổ số như hình thức giải trí có trả phí chứ không phải kênh đầu tư."
                     }
                 }
             }

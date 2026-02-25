@@ -11,6 +11,7 @@ import { ModelSelector } from './ModelSelector';
 import { CostEstimator } from './CostEstimator';
 import { MODEL_CONFIGS } from '@/lib/config/models';
 import { getUserSettings, updateUserSettings } from '@/lib/settings';
+import { useModelAvailability } from '@/lib/hooks/useModelAvailability';
 
 interface ExperimentFormProps {
   experiment: ExperimentMetadata;
@@ -29,8 +30,10 @@ export const ExperimentForm = memo(function ExperimentForm({
   const [error, setError] = useState<string | null>(null);
   const [showDraftNotice, setShowDraftNotice] = useState(false);
   const [draftAge, setDraftAge] = useState<string | null>(null);
+  const [hasUserBYOK, setHasUserBYOK] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
   const t = useTranslations('ExperimentForm');
+  const { providers } = useModelAvailability();
 
   // State for model selection - Initialize from global settings or default
   const [model, setModel] = useState<string>(() => {
@@ -41,6 +44,9 @@ export const ExperimentForm = memo(function ExperimentForm({
   });
   // Daily budget limit (approximate, should match server)
   const DAILY_LIMIT = 5.0;
+  const PER_REQUEST_LIMIT = 0.2;
+
+  const DEFAULT_ARENA_MODELS = ['gpt-4o', 'claude-3-5-sonnet-latest'];
 
   // Load draft on mount (if no initialInput provided)
   useEffect(() => {
@@ -57,6 +63,17 @@ export const ExperimentForm = memo(function ExperimentForm({
       }
     }
   }, [experiment.slug, initialInput]);
+
+  // Detect if user has provided any personal API key (BYOK)
+  useEffect(() => {
+    const settings = getUserSettings();
+    const hasKey =
+      !!settings.openaiKey ||
+      !!settings.anthropicKey ||
+      !!settings.geminiKey ||
+      !!settings.groqKey;
+    setHasUserBYOK(hasKey);
+  }, []);
 
   // Update input when initialInput changes (for loading from history/favorites)
   useEffect(() => {
@@ -192,6 +209,155 @@ export const ExperimentForm = memo(function ExperimentForm({
             {t('vietnamese-text.textHelp')}
           </p>
         </div>
+      )}
+
+      {experiment.slug === 'lottery-probability-lab' && (
+        <>
+          <div className="space-y-3">
+            <label className="block text-sm font-semibold text-foreground mb-2">
+              {t('lottery-probability-lab.gameTypeLabel')}
+            </label>
+            <select
+              value={input.gameType || 'power_655'}
+              onChange={e => {
+                const gameType = e.target.value;
+                let totalNumbers = input.totalNumbers ?? 55;
+                let pickNumbers = input.pickNumbers ?? 6;
+
+                if (gameType === 'power_655') {
+                  totalNumbers = 55;
+                  pickNumbers = 6;
+                } else if (gameType === 'power_645') {
+                  totalNumbers = 45;
+                  pickNumbers = 6;
+                } else if (gameType === 'power_535') {
+                  totalNumbers = 35;
+                  pickNumbers = 5;
+                }
+
+                handleChange('gameType', gameType);
+                handleChange('totalNumbers', totalNumbers);
+                handleChange('pickNumbers', pickNumbers);
+              }}
+              className="w-full px-4 py-3 bg-secondary border border-border rounded-lg text-foreground text-sm font-medium hover:border-border/80 transition-colors"
+            >
+              <option value="power_655">Vietlott Power 6/55</option>
+              <option value="power_645">Vietlott Power 6/45</option>
+              <option value="power_535">Vietlott Power 5/35</option>
+              <option value="custom">{t('lottery-probability-lab.gameTypeCustom')}</option>
+            </select>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="space-y-3">
+              <label className="block text-sm font-semibold text-foreground mb-2">
+                {t('lottery-probability-lab.poolSizeLabel')}
+              </label>
+              <input
+                type="number"
+                min={1}
+                max={200}
+                value={input.totalNumbers ?? 55}
+                onChange={e => handleChange('totalNumbers', Number(e.target.value))}
+                className="w-full px-4 py-3 bg-secondary border border-border rounded-lg text-foreground text-sm font-medium hover:border-border/80 transition-colors"
+              />
+              <p className="text-xs text-muted-foreground">
+                {t('lottery-probability-lab.poolSizeHelp')}
+              </p>
+            </div>
+
+            <div className="space-y-3">
+              <label className="block text-sm font-semibold text-foreground mb-2">
+                {t('lottery-probability-lab.pickCountLabel')}
+              </label>
+              <input
+                type="number"
+                min={1}
+                max={10}
+                value={input.pickNumbers ?? 6}
+                onChange={e => handleChange('pickNumbers', Number(e.target.value))}
+                className="w-full px-4 py-3 bg-secondary border border-border rounded-lg text-foreground text-sm font-medium hover:border-border/80 transition-colors"
+              />
+              <p className="text-xs text-muted-foreground">
+                {t('lottery-probability-lab.pickCountHelp')}
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="space-y-3">
+              <label className="block text-sm font-semibold text-foreground mb-2">
+                {t('lottery-probability-lab.ticketPriceLabel')}
+              </label>
+              <input
+                type="number"
+                min={0}
+                step={1000}
+                value={input.ticketPrice ?? 10000}
+                onChange={e => handleChange('ticketPrice', Number(e.target.value))}
+                className="w-full px-4 py-3 bg-secondary border border-border rounded-lg text-foreground text-sm font-medium hover:border-border/80 transition-colors"
+              />
+              <p className="text-xs text-muted-foreground">
+                {t('lottery-probability-lab.ticketPriceHelp')}
+              </p>
+            </div>
+
+            <div className="space-y-3">
+              <label className="block text-sm font-semibold text-foreground mb-2">
+                {t('lottery-probability-lab.jackpotLabel')}
+              </label>
+              <input
+                type="number"
+                min={0}
+                step={1000000000}
+                value={input.jackpotPrize ?? 30000000000}
+                onChange={e => handleChange('jackpotPrize', Number(e.target.value))}
+                className="w-full px-4 py-3 bg-secondary border border-border rounded-lg text-foreground text-sm font-medium hover:border-border/80 transition-colors"
+              />
+              <p className="text-xs text-muted-foreground">
+                {t('lottery-probability-lab.jackpotHelp')}
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="space-y-3">
+              <label className="block text-sm font-semibold text-foreground mb-2">
+                {t('lottery-probability-lab.drawsLabel')}
+              </label>
+              <input
+                type="number"
+                min={1}
+                max={10000}
+                value={input.draws ?? 52}
+                onChange={e => handleChange('draws', Number(e.target.value))}
+                className="w-full px-4 py-3 bg-secondary border border-border rounded-lg text-foreground text-sm font-medium hover:border-border/80 transition-colors"
+              />
+              <p className="text-xs text-muted-foreground">
+                {t('lottery-probability-lab.drawsHelp')}
+              </p>
+            </div>
+
+            <div className="space-y-3">
+              <label className="block text-sm font-semibold text-foreground mb-2">
+                {t('lottery-probability-lab.ticketsPerDrawLabel')}
+              </label>
+              <input
+                type="number"
+                min={1}
+                max={10000}
+                value={input.ticketsPerDraw ?? 1}
+                onChange={e =>
+                  handleChange('ticketsPerDraw', Number(e.target.value))
+                }
+                className="w-full px-4 py-3 bg-secondary border border-border rounded-lg text-foreground text-sm font-medium hover:border-border/80 transition-colors"
+              />
+              <p className="text-xs text-muted-foreground">
+                {t('lottery-probability-lab.ticketsPerDrawHelp')}
+              </p>
+            </div>
+          </div>
+        </>
       )}
 
       {experiment.slug === 'code-insight' && (
@@ -354,23 +520,54 @@ export const ExperimentForm = memo(function ExperimentForm({
             <label className="block text-sm font-semibold text-foreground mb-2">
               {t('model-arena.modelsToCompareLabel')}
             </label>
-            <div className="grid grid-cols-2 gap-2">
-              {['gpt-4o', 'claude-3-5-sonnet-latest', 'gemini-1.5-pro', 'llama-3-70b'].map(m => (
-                <label key={m} className="flex items-center gap-2 p-2 rounded hover:bg-secondary cursor-pointer border border-border/50">
-                  <input
-                    type="checkbox"
-                    checked={(input.modelsToCompare || ['gpt-4o', 'claude-3-5-sonnet-latest']).includes(m)}
-                    onChange={e => {
-                      const current = input.modelsToCompare || ['gpt-4o', 'claude-3-5-sonnet-latest'];
-                      const next = e.target.checked
-                        ? [...current, m]
-                        : current.filter((x: string) => x !== m);
-                      handleChange('modelsToCompare', next);
-                    }}
-                  />
-                  <span className="text-sm font-medium">{m}</span>
-                </label>
-              ))}
+            <div className="space-y-3">
+              {Object.entries(
+                Object.entries(MODEL_CONFIGS).reduce(
+                  (acc, [id, cfg]) => {
+                    const provider = cfg.provider;
+                    if (!acc[provider]) acc[provider] = [];
+                    acc[provider].push(id);
+                    return acc;
+                  },
+                  {} as Record<string, string[]>
+                )
+              ).map(([provider, models]) => {
+                const enabled =
+                  providers[provider as keyof typeof providers] ?? true;
+                return (
+                  <div key={provider}>
+                    <div className="px-1 pb-1 text-[11px] font-semibold text-muted-foreground uppercase">
+                      {provider}
+                      {!enabled && ' (provider not configured)'}
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      {models.map(m => (
+                        <label
+                          key={m}
+                          className="flex items-center gap-2 p-2 rounded border border-border/50 hover:bg-secondary cursor-pointer text-xs"
+                        >
+                          <input
+                            type="checkbox"
+                            disabled={!enabled}
+                            checked={(
+                              input.modelsToCompare || DEFAULT_ARENA_MODELS
+                            ).includes(m)}
+                            onChange={e => {
+                              const current =
+                                input.modelsToCompare || DEFAULT_ARENA_MODELS;
+                              const next = e.target.checked
+                                ? Array.from(new Set([...current, m]))
+                                : current.filter((x: string) => x !== m);
+                              handleChange('modelsToCompare', next);
+                            }}
+                          />
+                          <span className="text-sm font-medium">{m}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </>
@@ -472,11 +669,24 @@ export const ExperimentForm = memo(function ExperimentForm({
       )}
 
       {/* Cost Estimator */}
-      <CostEstimator
-        input={currentInputText}
-        model={model}
-        limit={DAILY_LIMIT}
-      />
+      <div className="space-y-1">
+        <CostEstimator
+          input={currentInputText}
+          model={model}
+          limit={DAILY_LIMIT}
+        />
+        <p className="text-[11px] text-muted-foreground">
+          {hasUserBYOK
+            ? t('costEstimator.byokNote', {
+                perRequest: PER_REQUEST_LIMIT.toFixed(2),
+                daily: DAILY_LIMIT.toFixed(2),
+              })
+            : t('costEstimator.sharedBudgetNote', {
+                perRequest: PER_REQUEST_LIMIT.toFixed(2),
+                daily: DAILY_LIMIT.toFixed(2),
+              })}
+        </p>
+      </div>
 
       {error && (
         <div className="p-4 bg-destructive/10 border border-destructive/30 rounded-lg text-destructive text-sm flex gap-3">
@@ -489,7 +699,7 @@ export const ExperimentForm = memo(function ExperimentForm({
         <Button
           type="submit"
           disabled={loading}
-          className="w-full h-11 font-semibold text-base transition-all"
+          className="w-full h-11 font-semibold text-base transition-all bg-muted text-white hover:bg-muted/80 hover:text-white"
         >
           {loading ? (
             <>
