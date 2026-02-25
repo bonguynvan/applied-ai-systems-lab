@@ -9,9 +9,9 @@ import { CustomExperimentBuilder } from '@/components/CustomExperimentBuilder';
 import { SettingsModal } from '@/components/SettingsModal';
 
 export const metadata: Metadata = {
-  title: 'Applied AI Playground',
+  title: 'Applied AI Systems Lab',
   description:
-    'A developer\'s sandbox for exploring practical AI integration patterns.',
+    'Open-source AI playground for production-grade, cost-aware multi-model experiments.',
 };
 
 export const viewport: Viewport = {
@@ -120,15 +120,17 @@ export default function Home() {
             {[
               {
                 title: 'AI Integration',
-                description: 'Single API for multiple providers (OpenAI, Anthropic, etc.) with automatic retry.',
+                description:
+                  'Single orchestrator for OpenAI, Anthropic, Gemini, Groq with automatic retry and BYOK support.',
               },
               {
                 title: 'Smart Caching',
                 description: 'SHA-256 hashed inputs with TTL-based caching to save costs and reduce latency.',
               },
               {
-                title: 'Cost Tracking',
-                description: 'Real-time token estimation and cost calculation per request.',
+                title: 'Cost & Budget Control',
+                description:
+                  'Real-time token estimation, per-request cost caps, and daily budget limits for shared API keys.',
               },
               {
                 title: 'Observability',
@@ -140,7 +142,8 @@ export default function Home() {
               },
               {
                 title: 'Extensibility',
-                description: 'Modular architecture makes adding new demos easy without touching core logic.',
+                description:
+                  'Modular experiment system (Model Arena, Lottery Lab, CoT, Robustness, etc.) without touching core logic.',
               },
             ].map((feature, i) => (
               <div
@@ -171,7 +174,7 @@ export default function Home() {
               </h3>
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li>• Next.js 16 (App Router)</li>
-                <li>• React 19 with TypeScript</li>
+                <li>• React with TypeScript</li>
                 <li>• Tailwind CSS 3</li>
                 <li>• shadcn/ui Components</li>
               </ul>
@@ -183,8 +186,8 @@ export default function Home() {
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li>• Vercel AI SDK</li>
                 <li>• Zod for validation</li>
-                <li>• OpenAI, Anthropic, Groq</li>
-                <li>• In-memory caching (Redis-ready)</li>
+                <li>• OpenAI, Anthropic, Groq, Gemini</li>
+                <li>• In-memory caching, Redis-ready rate limit & budget control</li>
               </ul>
             </div>
           </div>
