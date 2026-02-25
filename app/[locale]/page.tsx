@@ -200,8 +200,23 @@ export default function Home() {
       {/* Footer */}
       <footer className="border-t border-border mt-16 py-8">
         <div className="max-w-6xl mx-auto px-4 text-center text-sm text-muted-foreground">
-          <p>
-            Applied AI Playground • Built with Next.js and Vercel AI SDK
+          <p>Applied AI Systems Lab • Built with Next.js and Vercel AI SDK</p>
+          <p className="mt-1">
+            <a
+              href="https://github.com/bonguynvan/applied-ai-systems-lab"
+              target="_blank"
+              rel="noreferrer"
+              className="underline underline-offset-4 hover:text-foreground"
+            >
+              GitHub
+            </a>
+            <span className="mx-2">•</span>
+            <a
+              href="mailto:hello@bodev.vn"
+              className="underline underline-offset-4 hover:text-foreground"
+            >
+              hello@bodev.vn
+            </a>
           </p>
         </div>
       </footer>
