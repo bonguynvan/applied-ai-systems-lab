@@ -17,8 +17,8 @@ export const cotReasoningOutputSchema = z.object({
         conclusion: z.string(),
     })),
     finalAnswer: z.string(),
-    reflection: z.string(),
-    confidence: z.number().min(0).max(1),
+    reflection: z.string().optional().default(''),
+    confidence: z.number().min(0).max(1).optional().default(0.8),
 });
 
 export type CotReasoningOutput = z.infer<typeof cotReasoningOutputSchema>;
