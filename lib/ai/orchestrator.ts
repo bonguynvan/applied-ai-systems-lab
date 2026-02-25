@@ -189,13 +189,24 @@ export async function callAI(
     );
   }
 
-  // Check daily budget
-  if (!getRedis()) checkAndResetDailyBudget();
-  const currentSpent = getRedis() ? await getDailySpentRedis() : dailyCost;
-  if (currentSpent >= DAILY_BUDGET_LIMIT) {
-    throw new Error(
-      `Đã đạt giới hạn ngân sách hôm nay ($${DAILY_BUDGET_LIMIT}). Vui lòng thử lại vào ngày mai.`
+  const usingUserKey =
+    !!options.userKeys &&
+    !!(
+      options.userKeys.openai ||
+      options.userKeys.anthropic ||
+      options.userKeys.groq ||
+      options.userKeys.google
     );
+
+  // Check daily budget only when using shared server-side keys
+  if (!usingUserKey) {
+    if (!getRedis()) checkAndResetDailyBudget();
+    const currentSpent = getRedis() ? await getDailySpentRedis() : dailyCost;
+    if (currentSpent >= DAILY_BUDGET_LIMIT) {
+      throw new Error(
+        `Đã đạt giới hạn ngân sách hôm nay ($${DAILY_BUDGET_LIMIT}). Vui lòng thử lại vào ngày mai.`
+      );
+    }
   }
 
   const startTime = performance.now();
@@ -215,13 +226,15 @@ export async function callAI(
     );
   }
 
-  // Pre-check estimated cost
-  const estimatedInputTokens = estimateTokens(prompt);
-  const estimatedCost = calculateCost(model, estimatedInputTokens, maxTokens);
-  if (estimatedCost > MAX_COST_PER_REQUEST) {
-    throw new Error(
-      `Request này ước tính tốn $${estimatedCost.toFixed(4)}, vượt quá giới hạn $${MAX_COST_PER_REQUEST} mỗi request.`
-    );
+  // Pre-check estimated cost only for shared keys
+  if (!usingUserKey) {
+    const estimatedInputTokens = estimateTokens(prompt);
+    const estimatedCost = calculateCost(model, estimatedInputTokens, maxTokens);
+    if (estimatedCost > MAX_COST_PER_REQUEST) {
+      throw new Error(
+        `Request này ước tính tốn $${estimatedCost.toFixed(4)}, vượt quá giới hạn $${MAX_COST_PER_REQUEST} mỗi request.`
+      );
+    }
   }
 
   let lastError: Error | null = null;
@@ -255,11 +268,13 @@ export async function callAI(
       // Calculate cost
       const cost = calculateCost(model, inputTokens, outputTokens);
 
-      // Track daily cost (Redis or in-memory)
-      if (getRedis()) {
-        await addDailyCostRedis(cost);
-      } else {
-        dailyCost += cost;
+      // Track daily cost (Redis or in-memory) only for shared keys
+      if (!usingUserKey) {
+        if (getRedis()) {
+          await addDailyCostRedis(cost);
+        } else {
+          dailyCost += cost;
+        }
       }
 
       return {
