@@ -596,7 +596,7 @@
             "help": "Các mô hình khác nhau có khả năng và chi phí khác nhau."
         }
     },
-        "ResultDisplay": {
+    "ResultDisplay": {
         "actions": {
             "copyResult": "Sao chép kết quả",
             "copied": "Đã sao chép!",
@@ -685,6 +685,42 @@
             "historyTitle": "Tần suất xuất hiện số (Power 6/55)",
             "historySubtitle": "Số lần mỗi con số 1–55 đã được quay trong lịch sử. Trong một hệ thống xổ số công bằng, phân bố này sẽ xấp xỉ phẳng; tần suất quá khứ không làm tăng xác suất thực sự của một con số trong các kỳ quay tương lai.",
             "historySeriesLabel": "Số lần xuất hiện"
+        },
+        "dataExtractor": {
+            "summary": "Tóm tắt",
+            "entities": "Thực thể",
+            "dates": "Ngày tháng",
+            "topics": "Chủ đề",
+            "confidence": "Độ tin cậy"
+        },
+        "modelArena": {
+            "bestFit": "Model phù hợp nhất",
+            "comparison": "So sánh tổng quan",
+            "responses": "Phản hồi từ các Model",
+            "best": "Tốt nhất",
+            "analysis": "Phân tích"
+        },
+        "intentClassifier": {
+            "intent": "Ý định",
+            "subIntent": "Ý định phụ",
+            "priority": "Mức độ ưu tiên",
+            "suggestedAction": "Hành động đề xuất",
+            "reasoning": "Lý luận",
+            "entities": "Thực thể"
+        },
+        "cotReasoning": {
+            "confidence": "Độ tin cậy",
+            "steps": "Các bước suy luận",
+            "finalAnswer": "Kết luận cuối cùng",
+            "reflection": "Phản tư"
+        },
+        "robustness": {
+            "score": "Điểm số độ bền",
+            "impact": "Tác động lên độ chính xác",
+            "analysis": "Phân tích",
+            "perturbedPrompt": "Prompt bị nhiễu",
+            "originalResponse": "Phản hồi gốc",
+            "perturbedResponse": "Phản hồi sau nhiễu"
         }
     },
     "Experiments": {

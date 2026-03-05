@@ -596,7 +596,7 @@
             "help": "Different models have different capabilities and costs."
         }
     },
-        "ResultDisplay": {
+    "ResultDisplay": {
         "actions": {
             "copyResult": "Copy Result",
             "copied": "Copied!",
@@ -685,6 +685,42 @@
             "historyTitle": "Historical number frequency (Power 6/55)",
             "historySubtitle": "Counts of how often each number 1–55 has been drawn historically. In a fair lottery this distribution should be roughly flat; past frequency does not increase the true probability of a number in future draws.",
             "historySeriesLabel": "Draw count"
+        },
+        "dataExtractor": {
+            "summary": "Summary",
+            "entities": "Entities",
+            "dates": "Dates",
+            "topics": "Topics",
+            "confidence": "Confidence"
+        },
+        "modelArena": {
+            "bestFit": "Best Fit Model",
+            "comparison": "Comparison Summary",
+            "responses": "Model Responses",
+            "best": "Best",
+            "analysis": "Analysis"
+        },
+        "intentClassifier": {
+            "intent": "Intent",
+            "subIntent": "Sub-intent",
+            "priority": "Priority",
+            "suggestedAction": "Suggested Action",
+            "reasoning": "Reasoning",
+            "entities": "Entities"
+        },
+        "cotReasoning": {
+            "confidence": "Confidence",
+            "steps": "Reasoning Steps",
+            "finalAnswer": "Final Answer",
+            "reflection": "Reflection"
+        },
+        "robustness": {
+            "score": "Robustness Score",
+            "impact": "Impact on Accuracy",
+            "analysis": "Analysis",
+            "perturbedPrompt": "Perturbed Prompt",
+            "originalResponse": "Original Response",
+            "perturbedResponse": "Perturbed Response"
         }
     },
     "Experiments": {
