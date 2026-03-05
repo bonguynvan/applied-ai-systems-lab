@@ -11,6 +11,10 @@ export const metadata: Metadata = {
   description:
     'A developer\'s sandbox for exploring practical AI integration patterns with cost tracking and observability',
   generator: 'v0.app',
+  icons: {
+    icon: '/favicon.svg',
+    apple: '/logo.svg',
+  },
 }
 
 export const viewport: Viewport = {

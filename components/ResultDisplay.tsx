@@ -805,6 +805,263 @@ export const ResultDisplay = memo(function ResultDisplay({
             </div>
           </div>
         )}
+
+        {/* Data Extractor */}
+        {experimentSlug === 'data-extractor' && result.data && (
+          <div className="space-y-5">
+            <ResultTextField label={t('dataExtractor.summary') || 'Summary'} value={result.data.summary} />
+
+            <div>
+              <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">
+                {t('dataExtractor.entities') || 'Entities'}
+              </div>
+              <div className="space-y-2">
+                {result.data.entities?.map((entity: any, i: number) => (
+                  <div key={i} className="flex items-center gap-3 bg-secondary border border-border/50 rounded-lg p-3">
+                    <span className="px-2 py-1 bg-accent/15 text-accent rounded text-xs font-medium">
+                      {entity.type}
+                    </span>
+                    <span className="font-medium text-sm text-foreground">{entity.name}</span>
+                    {entity.context && (
+                      <span className="text-sm text-muted-foreground flex-grow">{entity.context}</span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {result.data.dates && result.data.dates.length > 0 && (
+              <div>
+                <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">
+                  {t('dataExtractor.dates') || 'Dates'}
+                </div>
+                <div className="space-y-2">
+                  {result.data.dates.map((item: any, i: number) => (
+                    <div key={i} className="flex items-center gap-3 bg-secondary border border-border/50 rounded-lg p-3">
+                      <span className="px-2 py-1 bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 rounded text-xs font-mono font-medium">
+                        {item.date}
+                      </span>
+                      <span className="text-sm text-foreground flex-grow">{item.event}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {result.data.topics && result.data.topics.length > 0 && (
+              <div>
+                <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">
+                  {t('dataExtractor.topics') || 'Topics'}
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {result.data.topics.map((topic: string, i: number) => (
+                    <span
+                      key={i}
+                      className="px-3 py-1.5 bg-accent/15 text-accent border border-accent/30 rounded-md text-xs font-medium"
+                    >
+                      {topic}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <ResultField
+              label={t('dataExtractor.confidence') || 'Confidence'}
+              value={`${Math.round((result.data.confidence || 0) * 100)}%`}
+            />
+          </div>
+        )}
+
+        {/* Model Arena */}
+        {experimentSlug === 'model-arena' && result.data && (
+          <div className="space-y-5">
+            <ResultField
+              label={t('modelArena.bestFit') || 'Best Fit Model'}
+              value={result.data.bestFitModel}
+            />
+            <ResultTextField label={t('modelArena.comparison') || 'Comparison Summary'} value={result.data.comparisonSummary} />
+
+            <div>
+              <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-4">
+                {t('modelArena.responses') || 'Model Responses'}
+              </div>
+              <div className="space-y-4">
+                {result.data.responses?.map((response: any, i: number) => (
+                  <div key={i} className="border border-border rounded-lg overflow-hidden">
+                    <div className="bg-muted/50 px-4 py-2 border-b border-border flex items-center justify-between">
+                      <span className="font-mono text-sm font-medium text-foreground">{response.model}</span>
+                      {response.model === result.data.bestFitModel && (
+                        <span className="px-2 py-0.5 bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 rounded text-xs font-medium">
+                          {t('modelArena.best') || 'Best'}
+                        </span>
+                      )}
+                    </div>
+                    <div className="p-4 bg-card">
+                      <pre className="text-sm text-foreground whitespace-pre-wrap font-sans">{response.response}</pre>
+                      {response.analysis && (
+                        <div className="mt-3 pt-3 border-t border-border/50">
+                          <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">
+                            {t('modelArena.analysis') || 'Analysis'}
+                          </div>
+                          <p className="text-sm text-muted-foreground">{response.analysis}</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Intent Classifier */}
+        {experimentSlug === 'intent-classifier' && result.data && (
+          <div className="space-y-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <ResultField label={t('intentClassifier.intent') || 'Intent'} value={result.data.intent} />
+              {result.data.subIntent && (
+                <ResultField label={t('intentClassifier.subIntent') || 'Sub-intent'} value={result.data.subIntent} />
+              )}
+            </div>
+
+            <div>
+              <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">
+                {t('intentClassifier.priority') || 'Priority'}
+              </div>
+              <span className={`inline-flex px-3 py-1.5 rounded-md text-xs font-medium ${
+                result.data.priority === 'urgent' ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' :
+                result.data.priority === 'high' ? 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400' :
+                result.data.priority === 'medium' ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400' :
+                'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+              }`}>
+                {result.data.priority}
+              </span>
+            </div>
+
+            <ResultTextField label={t('intentClassifier.suggestedAction') || 'Suggested Action'} value={result.data.suggestedAction} />
+            <ResultTextField label={t('intentClassifier.reasoning') || 'Reasoning'} value={result.data.reasoning} />
+
+            {result.data.entities && Object.keys(result.data.entities).length > 0 && (
+              <div>
+                <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">
+                  {t('intentClassifier.entities') || 'Entities'}
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                  {Object.entries(result.data.entities).map(([key, value]: [string, any], i: number) => (
+                    <div key={i} className="flex items-center gap-2 bg-secondary border border-border/50 rounded-lg p-3">
+                      <span className="px-2 py-1 bg-accent/15 text-accent rounded text-xs font-medium">
+                        {key}
+                      </span>
+                      <span className="text-sm text-foreground">{String(value)}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* CoT Reasoning */}
+        {experimentSlug === 'cot-reasoning' && result.data && (
+          <div className="space-y-5">
+            {result.data.confidence !== undefined && (
+              <ResultField
+                label={t('cotReasoning.confidence') || 'Confidence'}
+                value={`${Math.round(result.data.confidence * 100)}%`}
+              />
+            )}
+
+            <div>
+              <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-4">
+                {t('cotReasoning.steps') || 'Reasoning Steps'}
+              </div>
+              <div className="space-y-4">
+                {result.data.steps?.map((step: any, i: number) => (
+                  <div key={i} className="relative pl-8">
+                    <div className="absolute left-0 top-0 w-6 h-6 rounded-full bg-accent/20 flex items-center justify-center text-xs font-medium text-accent">
+                      {step.stepNumber}
+                    </div>
+                    <div className="bg-secondary border border-border/50 rounded-lg p-4">
+                      <div className="text-sm text-foreground mb-2">{step.thought}</div>
+                      <div className="text-xs text-muted-foreground border-t border-border/50 pt-2 mt-2">
+                        {step.conclusion}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="border border-accent/30 bg-accent/10 rounded-lg p-4">
+              <div className="text-xs font-semibold text-accent uppercase tracking-wide mb-2">
+                {t('cotReasoning.finalAnswer') || 'Final Answer'}
+              </div>
+              <p className="text-base text-foreground font-medium">{result.data.finalAnswer}</p>
+            </div>
+
+            {result.data.reflection && (
+              <ResultTextField label={t('cotReasoning.reflection') || 'Reflection'} value={result.data.reflection} />
+            )}
+          </div>
+        )}
+
+        {/* Robustness Tester */}
+        {experimentSlug === 'robustness-tester' && result.data && (
+          <div className="space-y-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <MetadataCard
+                label={t('robustness.score') || 'Robustness Score'}
+                value={`${result.data.robustnessScore}/100`}
+                highlight={result.data.robustnessScore >= 70}
+              />
+              <div>
+                <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">
+                  {t('robustness.impact') || 'Impact on Accuracy'}
+                </div>
+                <span className={`inline-flex px-3 py-1.5 rounded-md text-xs font-medium ${
+                  result.data.impactOnAccuracy === 'none' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' :
+                  result.data.impactOnAccuracy === 'minor' ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' :
+                  result.data.impactOnAccuracy === 'significant' ? 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400' :
+                  'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
+                }`}>
+                  {result.data.impactOnAccuracy}
+                </span>
+              </div>
+            </div>
+
+            <ResultTextField label={t('robustness.analysis') || 'Analysis'} value={result.data.analysis} />
+
+            <div>
+              <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">
+                {t('robustness.perturbedPrompt') || 'Perturbed Prompt'}
+              </div>
+              <CodeBlockWithCopy
+                content={result.data.perturbedPrompt}
+                className="bg-secondary border border-border rounded-lg p-4 pr-12 overflow-x-auto"
+              />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">
+                  {t('robustness.originalResponse') || 'Original Response'}
+                </div>
+                <div className="bg-secondary border border-border/50 rounded-lg p-4 text-sm text-foreground h-32 overflow-y-auto">
+                  {result.data.originalResponse}
+                </div>
+              </div>
+              <div>
+                <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">
+                  {t('robustness.perturbedResponse') || 'Perturbed Response'}
+                </div>
+                <div className="bg-secondary border border-border/50 rounded-lg p-4 text-sm text-foreground h-32 overflow-y-auto">
+                  {result.data.perturbedResponse}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

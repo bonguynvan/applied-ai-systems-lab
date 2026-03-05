@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Background circle -->
+  <circle cx="50" cy="50" r="48" fill="#1e293b" stroke="#3b82f6" stroke-width="2"/>
+
+  <!-- Flask/beaker base -->
+  <path d="M35 35 L35 55 L30 65 L70 65 L65 55 L65 35 Z" fill="#334155" stroke="#64748b" stroke-width="1.5" stroke-linejoin="round"/>
+
+  <!-- Flask neck -->
+  <rect x="40" y="25" width="20" height="12" rx="2" fill="#334155" stroke="#64748b" stroke-width="1.5"/>
+
+  <!-- Liquid inside -->
+  <path d="M33 55 L33 62 Q33 65 36 65 L64 65 Q67 65 67 62 L67 55 Q50 50 33 55 Z" fill="#3b82f6" opacity="0.8"/>
+
+  <!-- Bubbles -->
+  <circle cx="42" cy="58" r="2.5" fill="#60a5fa"/>
+  <circle cx="55" cy="54" r="3" fill="#60a5fa"/>
+  <circle cx="48" cy="50" r="2" fill="#60a5fa"/>
+  <circle cx="58" cy="60" r="1.5" fill="#93c5fd"/>
+
+  <!-- AI brain/circuit dots -->
+  <circle cx="50" cy="40" r="3" fill="#22d3ee"/>
+  <circle cx="44" cy="44" r="1.5" fill="#22d3ee"/>
+  <circle cx="56" cy="44" r="1.5" fill="#22d3ee"/>
+  <circle cx="50" cy="48" r="1.5" fill="#22d3ee"/>
+
+  <!-- Connection lines -->
+  <line x1="50" y1="40" x2="44" y2="44" stroke="#22d3ee" stroke-width="1" opacity="0.6"/>
+  <line x1="50" y1="40" x2="56" y2="44" stroke="#22d3ee" stroke-width="1" opacity="0.6"/>
+  <line x1="50" y1="40" x2="50" y2="48" stroke="#22d3ee" stroke-width="1" opacity="0.6"/>
+
+  <!-- Test tube -->
+  <rect x="72" y="42" width="6" height="20" rx="3" fill="#334155" stroke="#64748b" stroke-width="1"/>
+  <rect x="74" y="48" width="2" height="10" rx="1" fill="#f472b6"/>
+</svg>
