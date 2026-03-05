@@ -73,7 +73,7 @@ It is designed as a teaching repo and a boilerplate you can fork for your own pr
 1. **Clone the repo**
 
    ```bash
-   git clone https://github.com/your-username/applied-ai-systems-lab.git
+   git clone https://github.com/bonguynvan/applied-ai-systems-lab.git
    cd applied-ai-systems-lab
    ```
 
